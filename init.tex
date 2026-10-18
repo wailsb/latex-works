@@ -14,6 +14,10 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
 \usetikzlibrary{positioning}
 \usepackage{hyperref}
 
@@ -1118,659 +1122,597 @@ flux IPFIX.
     \item IETF, RFC 7011, \url{https://www.rfc-editor.org/rfc/rfc7011}.
 \end{itemize}
 
-% --------------------------------------------------
-\subsection{Membre 6 : HTTP/HTTPS et serveurs Web}
-% --------------------------------------------------
-\membre{\dotfill}{42 à 45}
 
-\paragraph{A. HTTP/HTTPS et serveurs Web}
+%==================================================
+\section{Partie 4: SERVICES RÉSEAUX WEB }
+%==================================================
+\subsection*{A. HTTP/HTTPS et Serveurs Web}
+%--------------------------------------------------
+\subsection*{Question 42 : Diff\'erence entre HTTP et HTTPS}
+%--------------------------------------------------
 
-\subsubsection*{Question 42 (Facile) : Différence entre HTTP et HTTPS}
+\textbf{HTTP} (\textit{HyperText Transfer Protocol}) est le protocole qui permet \`a un navigateur et \`a un serveur d'\'echanger des pages web. Le probl\`eme : tout circule \textbf{en clair}. Toute personne plac\'ee sur le trajet (Wi-Fi public, fournisseur d'acc\`es, routeur compromis) peut lire ou modifier les donn\'ees \'echang\'ees.
 
-\reponse
-\begin{itemize}
-    \item \textbf{HTTP} (port 80) transmet les données \textbf{en clair}
-    : un attaquant sur le chemin peut lire et modifier les échanges.
-    \item \textbf{HTTPS} (port 443) est HTTP encapsulé dans
-    \textbf{TLS}. Il apporte la \textbf{confidentialité} (chiffrement),
-    l'\textbf{intégrité} (données non modifiées) et
-    l'\textbf{authentification} du serveur (certificat).
-\end{itemize}
+\textbf{HTTPS} (\textit{HTTP Secure}) est exactement le m\^eme protocole, mais encapsul\'e dans une couche de chiffrement : \textbf{TLS} (\textit{Transport Layer Security}, successeur de SSL). Les requ\^etes et r\'eponses sont chiffr\'ees avant de traverser le r\'eseau.
 
-\textbf{Pourquoi HTTPS est devenu la norme :}
-\begin{itemize}
-    \item protection des mots de passe, paiements et données
-    personnelles ;
-    \item les navigateurs affichent « Non sécurisé » pour les sites HTTP
-    et les moteurs de recherche favorisent HTTPS ;
-    \item certificats gratuits et automatisés (Let's Encrypt) ;
-    \item HTTP/2 et HTTP/3 ne sont utilisés par les navigateurs qu'avec
-    TLS ;
-    \item exigences réglementaires (protection des données, PCI DSS).
-\end{itemize}
-
-\sources
-\begin{itemize}
-    \item IETF, RFC 9110 : HTTP Semantics,
-    \url{https://www.rfc-editor.org/rfc/rfc9110}.
-\end{itemize}
-
-\subsubsection*{Question 43 (Moyen) : Les méthodes HTTP principales}
-
-\reponse
-\begin{longtable}{|L{1.8cm}|L{6cm}|L{2.4cm}|L{4.4cm}|}
-\hline
-\textbf{Méthode} & \textbf{Rôle} & \textbf{Idempotente} &
-\textbf{Exemple} \\ \hline
-\endhead
-GET & Lire une ressource, sans la modifier & Oui &
-\texttt{GET /etudiants/12} \\ \hline
-POST & Créer une ressource ou envoyer des données à traiter & Non &
-\texttt{POST /etudiants} \\ \hline
-PUT & Remplacer entièrement une ressource & Oui &
-\texttt{PUT /etudiants/12} \\ \hline
-PATCH & Modifier partiellement une ressource & Pas forcément &
-\texttt{PATCH /etudiants/12} (e-mail seul) \\ \hline
-DELETE & Supprimer une ressource & Oui & \texttt{DELETE /etudiants/12}
-\\ \hline
-\end{longtable}
-Une méthode \textbf{idempotente} donne le même résultat si on la répète
-plusieurs fois.
-
-\sources
-\begin{itemize}
-    \item IETF, RFC 9110 ; RFC 5789 : PATCH Method for HTTP,
-    \url{https://www.rfc-editor.org/rfc/rfc5789}.
-\end{itemize}
-
-\subsubsection*{Question 44 (Avancé) : HTTP/2 et HTTP/3}
-
-\reponse
-HTTP/1.1 envoie une requête à la fois par connexion TCP, avec des
-en-têtes texte répétés. Il souffre du \textbf{blocage en tête de file}
-(\textit{head-of-line blocking}), et les navigateurs ouvrent plusieurs
-connexions pour compenser.
-
-\begin{itemize}
-    \item \textbf{Multiplexage (HTTP/2) :} plusieurs requêtes et
-    réponses circulent en parallèle sur \textbf{une seule connexion},
-    sous forme de flux (\textit{streams}) découpés en trames binaires.
-    \item \textbf{Server Push (HTTP/2) :} le serveur envoie des
-    ressources avant qu'elles soient demandées (CSS, JS). En pratique,
-    il a été abandonné par les principaux navigateurs, au profit des
-    \textit{preload hints} (réponse 103 Early Hints).
-    \item \textbf{Compression des en-têtes :} \textbf{HPACK} en HTTP/2,
-    \textbf{QPACK} en HTTP/3. Les en-têtes répétés ne sont envoyés
-    qu'une fois.
-    \item \textbf{QUIC (HTTP/3) :} HTTP/3 remplace TCP par QUIC, sur
-    UDP. QUIC intègre TLS 1.3, établit la connexion plus vite (1-RTT,
-    voire 0-RTT), supprime le blocage en tête de file au niveau
-    transport (la perte d'un paquet ne bloque qu'un seul flux) et permet
-    la \textbf{migration de connexion} (passage du Wi-Fi à la 4G sans
-    coupure).
-\end{itemize}
-
-\sources
-\begin{itemize}
-    \item IETF, RFC 9113 : HTTP/2 ; RFC 9114 : HTTP/3 ; RFC 9000 :
-    QUIC, \url{https://www.rfc-editor.org/rfc/rfc9114}.
-\end{itemize}
-
-\subsubsection*{Question 45 (Pratique) : Les codes de statut HTTP}
-
-\reponse
-\begin{longtable}{|L{4.4cm}|L{10.2cm}|}
-\hline
-\textbf{Code} & \textbf{Contexte} \\ \hline
-\endhead
-200 OK & Requête réussie, la ressource est renvoyée. \\ \hline
-301 Moved Permanently & La ressource a changé définitivement d'adresse
-(ex. redirection de HTTP vers HTTPS). \\ \hline
-304 Not Modified & La ressource n'a pas changé depuis la version en
-cache du client : rien n'est renvoyé. \\ \hline
-401 Unauthorized & Authentification requise ou identifiants invalides.
-\\ \hline
-403 Forbidden & Le client est identifié, mais n'a pas le droit
-d'accéder à la ressource. \\ \hline
-404 Not Found & La ressource n'existe pas. \\ \hline
-500 Internal Server Error & Erreur dans l'application côté serveur (bug,
-exception). \\ \hline
-502 Bad Gateway & Un reverse proxy ou une passerelle a reçu une réponse
-invalide du serveur en amont (serveur d'application arrêté). \\ \hline
-503 Service Unavailable & Serveur surchargé ou en maintenance,
-indisponibilité temporaire. \\ \hline
-\end{longtable}
-Familles : 2xx succès, 3xx redirection, 4xx erreur du client, 5xx
-erreur du serveur.
-
-\sources
-\begin{itemize}
-    \item IETF, RFC 9110, section 15,
-    \url{https://www.rfc-editor.org/rfc/rfc9110}.
-\end{itemize}
-
-% --------------------------------------------------
-\subsection{Membre 7 : Proxy, reverse proxy et CDN}
-% --------------------------------------------------
-\membre{\dotfill}{46 à 51}
-
-\paragraph{B. Proxy et Reverse Proxy}
-
-\subsubsection*{Question 46 (Moyen) : Forward proxy et reverse proxy}
-
-\reponse
-\begin{itemize}
-    \item \textbf{Forward proxy :} placé \textbf{devant les clients}. Il
-    reçoit leurs requêtes et les transmet à Internet en leur nom. Il
-    représente les clients.
-
-    \textit{Exemples :} filtrage web en entreprise (Squid), contrôle
-    d'accès, journalisation, cache, contournement de restrictions.
-
-    \item \textbf{Reverse proxy :} placé \textbf{devant les serveurs}.
-    Il reçoit les requêtes d'Internet et les transmet aux serveurs
-    internes. Il représente les serveurs.
-
-    \textit{Exemples :} Nginx, HAProxy ou Traefik devant des serveurs
-    web : terminaison TLS, répartition de charge, cache, WAF.
-\end{itemize}
-
-\sources
-\begin{itemize}
-    \item Nginx, documentation Reverse Proxy,
-    \url{https://docs.nginx.com/}.
-\end{itemize}
-
-\subsubsection*{Question 47 (Pratique) : Avantages d'un reverse proxy}
-
-\reponse
+\paragraph{Pourquoi HTTPS est devenu la norme.} HTTPS est \textbf{chiffr\'e via TLS}, donc il apporte trois garanties essentielles :
 \begin{enumerate}
-    \item \textbf{Répartition de charge} entre plusieurs serveurs.
-    \item \textbf{Terminaison TLS} centralisée : un seul endroit pour
-    gérer les certificats, et moins de charge sur les serveurs.
-    \item \textbf{Cache} des contenus fréquents.
-    \item \textbf{Compression} (gzip, Brotli) des réponses.
-    \item \textbf{Masquage} de l'architecture interne : les clients ne
-    voient jamais l'adresse réelle des serveurs.
-    \item \textbf{Sécurité} : WAF, limitation de débit, filtrage.
-    \item \textbf{Haute disponibilité} : health checks et bascule.
-    \item \textbf{Routage} selon l'URL ou le nom de domaine vers
-    différentes applications.
+  \item \textbf{Authentification} : un certificat d\'elivr\'e par une autorit\'e de confiance prouve que le serveur est bien celui qu'il pr\'etend \^etre (protection contre l'usurpation et le phishing).
+  \item \textbf{Confidentialit\'e} : les donn\'ees sont chiffr\'ees, illisibles pour un tiers.
+  \item \textbf{Int\'egrit\'e} : impossible de modifier le contenu en transit sans \^etre d\'etect\'e.
 \end{enumerate}
 
-\sources
+%--------------------------------------------------
+\subsection*{Question 43 : M\'ethodes HTTP}
+%--------------------------------------------------
+
 \begin{itemize}
-    \item HAProxy Technologies, documentation,
-    \url{https://www.haproxy.com/documentation/}.
+  \item \textbf{GET} : r\'ecup\'erer une ressource. Utilis\'e pour lire des donn\'ees (ex. afficher une page, consulter une liste). Pas de modification c\^ot\'e serveur.
+  \item \textbf{POST} : cr\'eer une nouvelle ressource ou envoyer des donn\'ees \`a traiter. Utilis\'e pour les formulaires, l'inscription, l'envoi de fichiers.
+  \item \textbf{PUT} : remplacer enti\`erement une ressource existante (ou la cr\'eer si elle n'existe pas). Utilis\'e pour les mises \`a jour compl\`etes.
+  \item \textbf{PATCH} : modifier partiellement une ressource (seulement certains champs). Utilis\'e pour les mises \`a jour cibl\'ees.
+  \item \textbf{DELETE} : supprimer une ressource. Utilis\'e pour retirer un \'el\'ement (ex. supprimer un utilisateur, un article).
 \end{itemize}
 
-\subsubsection*{Question 48 (Avancé) : Sécurité, performances et disponibilité}
+%--------------------------------------------------
+\subsection*{Question 44 : \'Evolution de HTTP/1.1 \`a HTTP/3}
+%--------------------------------------------------
 
-\reponse
-\textbf{Sécurité :}
+\subsubsection*{HTTP/1.1}
 \begin{itemize}
-    \item il cache les IP et la technologie des serveurs (suppression de
-    l'en-tête \texttt{Server}) ;
-    \item WAF (ModSecurity) contre les injections SQL et le XSS ;
-    \item limitation de débit (\textit{rate limiting}) contre la force
-    brute et les petites attaques DDoS ;
-    \item TLS imposé partout et redirection HTTP \fl{} HTTPS ;
-    \item filtrage par IP, en-têtes ou pays.
+  \item Une requ\^ete \`a la fois par connexion TCP (\textit{head-of-line blocking} applicatif).
+  \item Ouverture de plusieurs connexions parall\`eles pour compenser.
+  \item En-t\^etes envoy\'es en texte brut, r\'ep\'et\'es \`a chaque requ\^ete.
 \end{itemize}
 
-\textbf{Performances :}
+\subsubsection*{HTTP/2 }
+Toujours sur TCP, mais avec plusieurs innovations :
 \begin{itemize}
-    \item cache des réponses (images, pages), qui n'atteignent plus les
-    serveurs ;
-    \item compression gzip ou Brotli ;
-    \item réutilisation des connexions (\textit{keep-alive}) vers les
-    serveurs ;
-    \item HTTP/2 et HTTP/3 côté clients, même si les serveurs ne les
-    supportent pas.
+  \item \textbf{Multiplexage} : plusieurs requ\^etes/r\'eponses simultan\'ees sur \textbf{une seule connexion TCP}, sans blocage applicatif. Fini les 6 connexions parall\`eles par domaine.
+  \item \textbf{Compression des en-t\^etes (HPACK)} : les en-t\^etes sont compress\'es et un dictionnaire partag\'e \'evite de renvoyer les m\^emes champs en boucle $\rightarrow$ moins de bande passante.
+  \item \textbf{Server Push} : le serveur peut envoyer des ressources (CSS, JS) \textbf{avant} que le client ne les demande, anticipant ses besoins (aujourd'hui peu utilis\'e, d\'epr\'eci\'e dans les navigateurs).
+  \item \textbf{Priorisation des flux} : indication de l'ordre d'importance des ressources.
+  \item Format \textbf{binaire} (plus efficace \`a parser que le texte).
 \end{itemize}
 
-\textbf{Disponibilité :}
+\textit{Limite} : le multiplexage HTTP/2 reste soumis au \textbf{head-of-line blocking TCP} : si un paquet TCP est perdu, tous les flux sont bloqu\'es.
+
+\subsubsection*{HTTP/3 }
+Remplace \textbf{TCP par QUIC} (transport bas\'e sur UDP) :
 \begin{itemize}
-    \item load balancing entre plusieurs serveurs ;
-    \item health checks : un serveur en panne est retiré automatiquement ;
-    \item failover vers un serveur de secours ;
-    \item maintenance sans coupure (retrait progressif d'un serveur).
+  \item \textbf{QUIC} : transport chiffr\'e int\'egr\'e (TLS 1.3 natif), poign\'ee de main plus rapide (0-RTT/1-RTT), et surtout \textbf{ind\'ependance des flux} : la perte d'un paquet ne bloque que le flux concern\'e $\rightarrow$ \'elimination du head-of-line blocking TCP.
+  \item \textbf{Multiplexage sans blocage} : chaque flux est ind\'ependant au niveau transport.
+  \item \textbf{Compression des en-t\^etes (QPACK)} : adapt\'ee \`a QUIC, \'evite les blocages li\'es \`a la compression.
+  \item \textbf{Migration de connexion} : la connexion survit \`a un changement d'IP (ex. passage Wi-Fi $\rightarrow$ 4G).
+  \item Server Push existe en th\'eorie mais est abandonn\'e en pratique.
 \end{itemize}
 
-\sources
+%--------------------------------------------------
+\subsection*{Question 45 : Codes de statut HTTP et contexte d'apparition}
+%--------------------------------------------------
+
+\subsubsection*{2xx -- Succ\`es}
 \begin{itemize}
-    \item OWASP, ModSecurity Core Rule Set, \url{https://owasp.org/}.
+  \item \textbf{200 OK} : la requ\^ete a r\'eussi ; la r\'eponse contient la ressource demand\'ee (page HTML, JSON, image\ldots). C'est le code par d\'efaut d'une requ\^ete GET/POST r\'eussie.
 \end{itemize}
 
-\paragraph{C. CDN (Content Delivery Network)}
+\subsubsection*{3xx -- Redirection}
+\begin{itemize}
+  \item \textbf{301 Moved Permanently} : la ressource a d\'efinitivement chang\'e d'URL (ex. ancien domaine $\rightarrow$ nouveau, passage en HTTPS, restructuration d'URL). Les clients et moteurs de recherche mettent \`a jour leurs liens ; le navigateur met en cache la redirection.
+  \item \textbf{304 Not Modified} : la ressource n'a pas chang\'e depuis la derni\`ere requ\^ete du client (via \texttt{If-Modified-Since} / \texttt{ETag}). Le client utilise sa copie en cache $\rightarrow$ \'economie de bande passante.
+\end{itemize}
 
-\subsubsection*{Question 49 (Facile) : Qu'est-ce qu'un CDN ?}
+\subsubsection*{4xx -- Erreurs client}
+\begin{itemize}
+  \item \textbf{401 Unauthorized} : authentification requise et absente ou invalide (pas de token, identifiants erron\'es). Le client doit s'authentifier (souvent via \texttt{WWW-Authenticate}).
+  \item \textbf{403 Forbidden} : le client est identifi\'e (ou non) mais \textbf{n'a pas les droits} d'acc\'eder \`a la ressource (r\^ole insuffisant, IP bloqu\'ee). Contrairement au 401, s'authentifier ne changerait rien.
+  \item \textbf{404 Not Found} : l'URL demand\'ee ne correspond \`a aucune ressource sur le serveur (lien cass\'e, ressource supprim\'ee).
+\end{itemize}
 
-\reponse
-Un CDN est un \textbf{réseau de serveurs de cache} (\textit{edge
-servers}) répartis dans le monde. Il stocke une copie des contenus
-d'un site au plus près des utilisateurs.
+\subsubsection*{5xx -- Erreurs serveur}
+\begin{itemize}
+  \item \textbf{500 Internal Server Error} : erreur non g\'er\'ee c\^ot\'e serveur (exception applicative, bug, erreur de base de donn\'ees).
+  \item \textbf{502 Bad Gateway} : un serveur agissant comme passerelle/proxy (ex. Nginx) a re\c{c}u une r\'eponse \textbf{invalide} d'un serveur amont (backend down, crash, r\'eponse malform\'ee).
+  \item \textbf{503 Service Unavailable} : le serveur est temporairement indisponible (surcharge, maintenance, plus de workers disponibles). Souvent accompagn\'e d'un header \texttt{Retry-After}.
+\end{itemize}
 
-\textbf{Principe :}
+\subsection*{B. Proxy et Reverse Proxy}
+%--------------------------------------------------
+\subsection*{Question 46 : Forward proxy vs Reverse proxy}
+%--------------------------------------------------
+
+\subsubsection*{Forward proxy (proxy \og client \fg)}
+Se place \textbf{devant les clients} : les clients envoient leurs requ\^etes au proxy, qui les transmet \`a Internet. Le serveur final ne voit que l'IP du proxy.
+
+\paragraph{Usages :}
+\begin{itemize}
+  \item Contournement de restrictions g\'eographiques / censure (VPN, proxies scolaires).
+  \item Anonymisation du client (masquer son IP).
+  \item Filtrage et contr\^ole d'acc\`es en entreprise (bloquer des sites).
+  \item Cache c\^ot\'e client pour un r\'eseau d'entreprise.
+  \item Journalisation centralis\'ee du trafic sortant.
+\end{itemize}
+
+\subsubsection*{Reverse proxy (proxy \og serveur \fg)}
+Se place \textbf{devant les serveurs} : les clients s'adressent au reverse proxy, qui relaie vers les bons serveurs internes. Le client ne voit que l'IP du proxy.
+
+\paragraph{Usages :}
+\begin{itemize}
+  \item Point d'entr\'ee unique pour un site (Nginx, HAProxy, Traefik).
+  \item R\'epartition de charge entre plusieurs backends.
+  \item Terminaison TLS (d\'echiffrement centralis\'e).
+  \item Cache et compression des r\'eponses.
+  \item Protection des serveurs internes (aucune exposition directe).
+\end{itemize}
+
+%--------------------------------------------------
+\subsection*{Question 47 : 5 avantages d'un reverse proxy (Nginx, HAProxy\ldots)}
+%--------------------------------------------------
+
 \begin{enumerate}
-    \item l'utilisateur demande une ressource ;
-    \item le DNS ou l'Anycast le dirige vers le serveur edge le plus
-    proche ;
-    \item si la ressource est en cache (\textit{cache hit}), elle est
-    servie directement ;
-    \item sinon (\textit{cache miss}), l'edge la récupère sur le serveur
-    d'origine, la sert et la garde en cache.
+  \item \textbf{R\'epartition de charge (\textit{load balancing})} : distribue le trafic entre plusieurs serveurs (round-robin, least connections\ldots), ce qui am\'eliore scalabilit\'e et tol\'erance aux pannes.
+  \item \textbf{Terminaison TLS centralis\'ee} : un seul point g\`ere les certificats HTTPS (renouvellement, chiffrement/d\'echiffrement), simplifiant la gestion et all\'egeant les backends.
+  \item \textbf{Cache et compression} : mise en cache des r\'eponses statiques et compression (gzip/brotli) $\rightarrow$ moins de charge sur les serveurs et r\'eponses plus rapides.
+  \item \textbf{S\'ecurit\'e} : masque la topologie interne, filtre les requ\^etes malveillantes, limite le d\'ebit (\textit{rate limiting}), bloque les IP, prot\`ege contre certaines attaques (DDoS applicatif, slowloris).
+  \item \textbf{Haute disponibilit\'e / failover} : d\'etection des backends d\'efaillants (\textit{health checks}) et redirection automatique vers les serveurs sains $\rightarrow$ continuit\'e de service.
 \end{enumerate}
-Résultat : latence réduite, moins de charge sur l'origine, absorption
-des pics de trafic et d'une partie des attaques DDoS.
 
-\exemple
-Cloudflare, Akamai, Amazon CloudFront.
+%--------------------------------------------------
+\subsection*{Question 48 : Am\'eliorations apport\'ees par un reverse proxy}
+%--------------------------------------------------
 
-\sources
+\subsubsection*{S\'ecurit\'e}
 \begin{itemize}
-    \item Cloudflare Learning Center, What is a CDN?,
-    \url{https://www.cloudflare.com/learning/}.
+  \item \textbf{Masquage de l'infrastructure} : les backends restent en r\'eseau priv\'e, jamais expos\'es directement.
+  \item \textbf{Terminaison TLS centralis\'ee} : HTTPS g\'er\'e au proxy, certificats centralis\'es.
+  \item \textbf{Rate limiting} : limite les requ\^etes par IP (anti brute-force, anti-DDoS).
+  \item \textbf{Filtrage / WAF} : blocage d'User-Agents malveillants, chemins suspects, m\'ethodes non autoris\'ees (ModSecurity).
+  \item \textbf{Authentification en amont} : v\'erification JWT/token avant d'atteindre les backends.
 \end{itemize}
 
-\subsubsection*{Question 50 (Moyen) : Contenus qui bénéficient le plus d'un CDN}
-
-\reponse
+\subsubsection*{Performances}
 \begin{itemize}
-    \item \textbf{Contenu statique} (images, CSS, JavaScript, polices) :
-    identique pour tous les utilisateurs et rarement modifié, donc
-    facile à mettre en cache longtemps.
-    \item \textbf{Vidéo et streaming} (HLS, DASH) : gros volumes, très
-    sensibles à la latence et au débit.
-    \item \textbf{Téléchargements de fichiers} (mises à jour logicielles,
-    jeux, ISO) : volume énorme et demandes simultanées.
-    \item \textbf{Pages web peu changeantes} (blogs, documentation).
-\end{itemize}
-Les contenus \textbf{dynamiques et personnalisés} (panier, compte
-utilisateur) en profitent moins pour le cache, mais gagnent quand même
-en accélération réseau et en protection DDoS.
-
-\sources
-\begin{itemize}
-    \item Akamai, What Is a CDN?, \url{https://www.akamai.com/}.
+  \item \textbf{Cache} : r\'eponses statiques servies sans toucher au backend.
+  \item \textbf{Compression} (gzip/brotli) : r\'eduit la bande passante.
+  \item \textbf{D\'echargement CPU} : TLS, compression et cache g\'er\'es par le proxy.
+  \item \textbf{HTTP/2-3 c\^ot\'e client} : m\^eme si les backends restent en HTTP/1.1.
 \end{itemize}
 
-\subsubsection*{Question 51 (Avancé) : Stratégies de cache dans un CDN}
-
-\reponse
+\subsubsection*{Disponibilit\'e}
 \begin{itemize}
-    \item \textbf{En-têtes Cache-Control :} le serveur d'origine indique
-    comment cacher. \texttt{max-age} (durée côté navigateur),
-    \texttt{s-maxage} (durée côté CDN), \texttt{public} ou
-    \texttt{private}, \texttt{no-store} (ne jamais cacher),
-    \texttt{no-cache} (revalider à chaque fois).
-    \item \textbf{TTL (Time To Live) :} durée pendant laquelle une copie
-    reste valide. Long pour le statique (un an avec des noms de fichiers
-    versionnés), court ou nul pour le dynamique. À expiration, l'edge
-    revalide avec \texttt{ETag} ou \texttt{Last-Modified} (réponse 304
-    si rien n'a changé).
-    \item \textbf{Edge caching et Origin shield :} l'edge cache est au
-    plus près des utilisateurs. L'\textbf{origin shield} est une couche
-    de cache intermédiaire entre les edges et l'origine : tous les cache
-    miss passent par lui, ce qui protège l'origine d'un trop grand
-    nombre de requêtes.
-    \item \textbf{Invalidation de cache :} supprimer une copie avant la
-    fin de son TTL, par \textbf{purge} (par URL, par tag ou complète) ou
-    par \textbf{versionnement} des fichiers (\texttt{style.v2.css}), qui
-    est la méthode la plus fiable.
+  \item \textbf{Load balancing} : r\'epartition sur plusieurs instances (round-robin, least-conn\ldots).
+  \item \textbf{Health checks} : backend d\'efaillant retir\'e automatiquement du pool.
+  \item \textbf{Failover} : bascule transparente vers un serveur de secours.
+  \item \textbf{D\'eploiements sans coupure} : retrait progressif (\textit{drain}), mise \`a jour, r\'eint\'egration.
+  \item \textbf{Retries} : renvoi automatique d'une requ\^ete \'echou\'ee vers un autre backend.
 \end{itemize}
 
-\exemple
-\texttt{Cache-Control: public, max-age=31536000, immutable} pour
-\texttt{app.3f2a1.js}, et \texttt{Cache-Control: no-store} pour la page
-de profil d'un utilisateur.
+%--------------------------------------------------
+\subsection*{C. CDN (Content Delivery Network)}
+\subsection*{Question 49 : Qu'est-ce qu'un CDN ?}
+%--------------------------------------------------
 
-\sources
+Un \textbf{CDN} (\textit{Content Delivery Network}) est un r\'eseau de serveurs distribu\'es g\'eographiquement (appel\'es \textbf{edge servers} ou points de pr\'esence, PoP) qui servent le contenu au plus pr\`es de l'utilisateur.
+
+\paragraph{Principe de base :}
+\begin{enumerate}
+  \item L'utilisateur demande une ressource via une URL (souvent r\'esolue par DNS vers le PoP le plus proche).
+  \item Le PoP \textbf{edge} v\'erifie s'il a la ressource en cache.
+  \item Si oui (\textbf{cache hit}) $\rightarrow$ r\'eponse imm\'ediate, sans contacter l'origine.
+  \item Si non (\textbf{cache miss}) $\rightarrow$ le PoP r\'ecup\`ere la ressource \`a l'\textbf{origine} (ou au PoP parent), la met en cache, puis la sert.
+  \item Les requ\^etes suivantes profitent du cache.
+\end{enumerate}
+
+\textbf{B\'en\'efices} : latence r\'eduite (proximit\'e), d\'echargement de l'origine, absorption des pics, r\'esilience r\'eseau.
+
+%--------------------------------------------------
+\subsection*{Question 50 : Quels contenus b\'en\'eficient le plus d'un CDN ?}
+%--------------------------------------------------
+
+Les contenus \textbf{statiques, volumineux et tr\`es demand\'es} :
+
+\medskip
+\noindent
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{5.2cm} Y@{}}
+\toprule
+\textbf{Type} & \textbf{Pourquoi} \\
+\midrule
+\textbf{Images, vid\'eos, audio} & Gros volumes, forte demande, mis en cache longtemps \\
+\textbf{Fichiers statiques (CSS, JS, polices)} & Identiques pour tous, cache longue dur\'ee, chargement critique \\
+\textbf{Pages HTML statiques} & Peuvent \^etre mises en cache int\'egralement \\
+\textbf{T\'el\'echargements (logiciels, mises \`a jour)} & Pics de trafic massifs absorb\'es par le CDN \\
+\textbf{R\'eponses d'API cacheables} & GET idempotents, donn\'ees peu changeantes \\
+\bottomrule
+\end{tabularx}
+
+\medskip
+\textbf{Pourquoi} : contenu identique pour tous les utilisateurs $\rightarrow$ \textbf{fort taux de cache hit}, peu ou pas de personnalisation, tol\'erant \`a un l\'eger d\'elai de fra\^icheur. \`A l'inverse, le contenu \textbf{dynamique et personnalis\'e} (panier, profil, donn\'ees temps r\'eel) b\'en\'eficie moins du cache (mais peut profiter de l'acc\'el\'eration r\'eseau / \textit{route optimization}).
+
+%--------------------------------------------------
+\subsection*{Question 51 : Strat\'egies de cache dans un CDN}
+%--------------------------------------------------
+
+\subsubsection*{Cache-Control headers}
 \begin{itemize}
-    \item IETF, RFC 9111 : HTTP Caching,
-    \url{https://www.rfc-editor.org/rfc/rfc9111}.
+  \item En-t\^etes HTTP qui d\'efinissent la politique de cache : \texttt{max-age}, \texttt{s-maxage} (sp\'ecifique CDN), \texttt{public}/\texttt{private}, \texttt{no-cache}, \texttt{no-store}, \texttt{stale-while-revalidate}, \texttt{stale-if-error}.
+  \item Permettent de contr\^oler finement ce qui est cacheable, par qui et combien de temps.
 \end{itemize}
 
-% --------------------------------------------------
-\subsection{Membre 8 : Load balancing et DNS Web}
-% --------------------------------------------------
-\membre{\dotfill}{52 à 57}
-
-\paragraph{D. Load Balancing Web}
-
-\subsubsection*{Question 52 (Moyen) : Algorithmes de répartition de charge}
-
-\reponse
-\begin{longtable}{|L{3cm}|L{5.8cm}|L{5.8cm}|}
-\hline
-\textbf{Algorithme} & \textbf{Principe} & \textbf{Scénario adapté} \\ \hline
-\endhead
-Round Robin & Les requêtes sont distribuées à tour de rôle. & Serveurs
-identiques, requêtes de durée similaire. \\ \hline
-Least Connections & La requête va au serveur qui a le moins de
-connexions actives. & Requêtes de durée variable (sessions longues,
-WebSocket, base de données). \\ \hline
-IP Hash & L'IP du client détermine toujours le même serveur. & Besoin
-de persistance de session sans cookie. \\ \hline
-Weighted Round Robin & Tour de rôle pondéré selon la capacité de chaque
-serveur. & Serveurs de puissances différentes (un serveur deux fois
-plus puissant reçoit deux fois plus de requêtes). \\ \hline
-\end{longtable}
-
-\sources
+\subsubsection*{TTL (Time To Live)}
 \begin{itemize}
-    \item Nginx, HTTP Load Balancing, \url{https://docs.nginx.com/}.
+  \item Dur\'ee pendant laquelle une ressource reste valide en cache avant d'\^etre consid\'er\'ee comme expir\'ee.
+  \item TTL long $\rightarrow$ moins de requ\^etes vers l'origine, mais risque de contenu p\'rim\'e ; TTL court $\rightarrow$ fra\^icheur mais plus de charge sur l'origine.
+  \item Choix par type : images/assets \textit{fingerprint\'es} = TTL tr\`es long (1 an) ; HTML = TTL court.
 \end{itemize}
 
-\subsubsection*{Question 53 (Avancé) : Load balancing de couche 4 et de couche 7}
-
-\reponse
+\subsubsection*{Edge caching vs Origin shield}
 \begin{itemize}
-    \item \textbf{Couche 4 (Transport) :} décide uniquement à partir des
-    IP, des ports et du protocole (TCP/UDP). Il ne lit pas le contenu.
-    Il est très rapide et peu gourmand, et fonctionne pour tout
-    protocole.
-
-    \textit{Décisions possibles :} tout le trafic TCP 443 vers le pool
-    A, le trafic UDP 53 vers le pool DNS, répartition par IP source.
-
-    \item \textbf{Couche 7 (Application) :} lit le contenu HTTP (URL,
-    en-têtes, cookies, nom d'hôte). Il est plus intelligent mais plus
-    coûteux, et doit déchiffrer TLS.
-
-    \textit{Décisions possibles :} \texttt{/api/*} vers les serveurs
-    d'API, \texttt{/images/*} vers les serveurs statiques,
-    \texttt{shop.exemple.dz} vers l'application boutique, utilisateurs
-    mobiles (User-Agent) vers une version dédiée, persistance par
-    cookie, tests A/B.
+  \item \textbf{Edge caching} : cache au PoP le plus proche de l'utilisateur $\rightarrow$ latence minimale.
+  \item \textbf{Origin shield} : un PoP interm\'ediaire centralise les requ\^etes vers l'origine. En cas de miss sur plusieurs edges, ils passent par le shield au lieu d'aller tous \`a l'origine $\rightarrow$ \textbf{r\'eduit la charge de l'origine} et am\'eliore le taux de hit global.
+  \item Hi\'erarchie typique : Edge $\rightarrow$ Shield $\rightarrow$ Origin.
 \end{itemize}
 
-\exemple
-Couche 4 : AWS Network Load Balancer, LVS. Couche 7 : HAProxy en mode
-HTTP, Nginx, AWS Application Load Balancer.
-
-\sources
+\subsubsection*{Invalidation de cache}
 \begin{itemize}
-    \item HAProxy, Layer 4 vs Layer 7 Load Balancing,
-    \url{https://www.haproxy.com/}.
+  \item Forcer le rafra\^ichissement d'une ressource avant expiration de son TTL.
+  \item M\'ethodes : \textbf{purge par URL/tag} (API du CDN), \textbf{versioning/fingerprinting} (\texttt{app.abc123.js}), purge globale.
+  \item \`A utiliser avec parcimonie (co\^uteux, perte de cache hit). Souvent combin\'ee au versioning pour \'eviter les purges.
 \end{itemize}
 
-\subsubsection*{Question 54 (Pratique) : Architecture web complète}
+%--------------------------------------------------
+\subsection*{D. Load Balancing Web}
+\subsection*{Question 52 : Algorithmes de r\'epartition de charge}
 
-\reponse
+%--------------------------------------------------
+
+\subsubsection*{Round Robin}
+\begin{itemize}
+  \item Distribue les requ\^etes \textbf{\`a tour de r\^ole} entre les serveurs.
+  \item \textbf{Sc\'enario id\'eal} : serveurs homog\`enes, requ\^etes de dur\'ee comparable, \textit{stateless}. Simple et \'equitable.
+\end{itemize}
+
+\subsubsection*{Least Connections}
+\begin{itemize}
+  \item Envoie la requ\^ete au serveur ayant \textbf{le moins de connexions actives}.
+  \item \textbf{Sc\'enario id\'eal} : requ\^etes de dur\'ee variable (certaines longues), serveurs h\'et\'erog\`enes en charge. \'Evite d'envoyer du trafic vers un serveur d\'ej\`a occup\'e.
+\end{itemize}
+
+\subsubsection*{IP Hash}
+\begin{itemize}
+  \item Calcule un hash de l'\textbf{IP client} pour choisir toujours le m\^eme serveur.
+  \item \textbf{Sc\'enario id\'eal} : besoin de \textbf{session affinity} (sessions stock\'ees localement sur le serveur, sans session partag\'ee). Attention : peu \'equilibr\'e si peu de clients derri\`ere un NAT.
+\end{itemize}
+
+\subsubsection*{Weighted Round Robin}
+\begin{itemize}
+  \item Round Robin pond\'er\'e : les serveurs les plus puissants re\c{c}oivent \textbf{plus de requ\^etes} (poids).
+  \item \textbf{Sc\'enario id\'eal} : \textbf{serveurs h\'et\'erog\`enes} (certains plus puissants), ou ajout progressif d'un nouveau serveur (poids croissant). Combine \'equit\'e et capacit\'e.
+\end{itemize}
+
+%--------------------------------------------------
+\subsection*{Question 53 : Load balancing Layer 4 vs Layer 7}
+%--------------------------------------------------
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.4cm} Y Y@{}}
+\toprule
+ & \textbf{Layer 4 (Transport)} & \textbf{Layer 7 (Application)} \\
+\midrule
+\textbf{Niveau OSI} & TCP/UDP (IP + ports) & HTTP/HTTPS, contenu \\
+\textbf{Visibilit\'e} & Ne voit que IP/port/protocole & Voit URL, headers, cookies, m\'ethode, corps \\
+\textbf{Performance} & \textbf{Tr\`es rapide}, peu de CPU & Plus co\^uteux (inspection, parsing) \\
+\textbf{Chiffrement} & Ne d\'echiffre pas (peut passer TLS en tunnel) & Peut terminer TLS pour inspecter \\
+\textbf{Complexit\'e} & Simple & Avanc\'e (routage riche) \\
+\bottomrule
+\end{tabularx}
+
+\paragraph{D\'ecisions de routage Layer 4 :}
+\begin{itemize}
+  \item Router selon l'\textbf{IP source} ou le \textbf{port de destination} (ex. port 3306 $\rightarrow$ serveurs MySQL).
+  \item Persistance par IP (session affinity basique).
+  \item R\'epartition TCP/UDP pure, sans connaissance de l'application.
+\end{itemize}
+
+\paragraph{D\'ecisions de routage Layer 7 :}
+\begin{itemize}
+  \item Router selon le \textbf{chemin d'URL} (\texttt{/api/*} $\rightarrow$ backend API, \texttt{/static/*} $\rightarrow$ serveurs statiques).
+  \item Router selon le \textbf{Host header} (multi-domaines sur une m\^eme IP : \texttt{a.com} vs \texttt{b.com}).
+  \item Router selon les \textbf{cookies} (canary release : 10\,\% des utilisateurs vers la v3).
+  \item Router selon les \textbf{headers} (\texttt{User-Agent} mobile $\rightarrow$ backend mobile).
+  \item \textbf{A/B testing}, \textbf{blue/green deployment}, r\'e\'ecriture d'URL, terminaison TLS, rate limiting applicatif.
+\end{itemize}
+
+%--------------------------------------------------
+\subsection*{Question 54  : Architecture compl\`ete}
+%--------------------------------------------------
+
+\paragraph{\'Enonc\'e.} Un site web comprend : des pages statiques (HTML, CSS, JS, images), une API REST, un service de streaming vid\'eo et une base de donn\'ees backend. On propose une architecture avec reverse proxy, load balancers, CDN, cache et serveurs d'application, en justifiant chaque choix.
+
+\subsubsection*{Sch\'ema d'ensemble}
+
 \begin{center}
-\small
-Utilisateurs \fl{} DNS (GeoDNS) \fl{} \textbf{CDN} \fl{} \textbf{WAF +
-Reverse proxy / LB couche 7} (en paire HA)\\
-\fl{} \textbf{Pool API} / \textbf{Pool statique} / \textbf{Serveurs de
-streaming}\\
-\fl{} \textbf{Cache Redis} \fl{} \textbf{Base de données} (primaire +
-réplique)
+\begin{tikzpicture}[
+  node distance=0.7cm and 0.5cm,
+  box/.style={draw, rounded corners, align=center, font=\footnotesize, text width=3.5cm, minimum height=0.9cm},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[box] (client) {\textbf{Clients}\\navigateur, mobile};
+\node[box, below=of client] (cdn) {\textbf{CDN}\\edge + origin shield};
+\node[box, below=of cdn] (rp) {\textbf{Reverse proxy}\\Nginx : TLS, WAF, rate limiting};
+
+\node[box, below=1.1cm of rp] (lb7) {\textbf{Load balancer L7}\\HAProxy (API)};
+\node[box, left=of lb7] (stat) {\textbf{Stockage statique}\\object storage};
+\node[box, right=of lb7] (lbs) {\textbf{Load balancer L4}\\streaming};
+
+\node[box, below=of lb7] (app) {\textbf{Serveurs d'application}\\API REST $\times N$ (stateless)};
+\node[box, below=of app] (redis) {\textbf{Cache Redis}\\sessions, r\'eponses};
+\node[box, below=of redis] (db) {\textbf{Base de donn\'ees}\\primaire + r\'eplicas};
+
+\node[box, below=of lbs] (media) {\textbf{Serveurs m\'edia}\\HLS/DASH $\times N$};
+\node[box, below=of media] (vod) {\textbf{Stockage vid\'eo}\\object storage};
+
+\draw[arr] (client) -- (cdn);
+\draw[arr] (cdn) -- (rp);
+\draw[arr] (rp) -- (lb7);
+\draw[arr] (rp.south) -- ++(0,-0.45) -| (stat.north);
+\draw[arr] (rp.south) -- ++(0,-0.45) -| (lbs.north);
+\draw[arr] (lb7) -- (app);
+\draw[arr] (app) -- (redis);
+\draw[arr] (redis) -- (db);
+\draw[arr] (lbs) -- (media);
+\draw[arr] (media) -- (vod);
+\end{tikzpicture}
+
 \end{center}
 
-\textbf{Justification de chaque choix :}
-\begin{itemize}
-    \item \textbf{CDN :} sert les pages statiques et les segments vidéo
-    au plus près des utilisateurs, absorbe les pics et les DDoS.
-    \item \textbf{Reverse proxy / load balancer couche 7} (HAProxy ou
-    Nginx, en paire active/passive avec VRRP) : terminaison TLS, WAF,
-    routage par URL (\texttt{/api} \fl{} pool API, \texttt{/video} \fl{}
-    streaming), health checks.
-    \item \textbf{Serveurs d'application de l'API REST :} plusieurs
-    instances sans état (stateless), ajoutées selon la charge, avec
-    l'algorithme least connections.
-    \item \textbf{Streaming vidéo :} serveurs dédiés (HLS/DASH) ou
-    stockage objet derrière le CDN, car le trafic est très volumineux.
-    \item \textbf{Cache (Redis ou Memcached) :} stocke les résultats
-    fréquents de l'API et les sessions, ce qui soulage la base.
-    \item \textbf{Base de données :} un serveur primaire pour les
-    écritures et des répliques en lecture, avec sauvegardes, dans un
-    réseau privé non exposé.
-\end{itemize}
-
-\sources
-\begin{itemize}
-    \item AWS, Well-Architected Framework,
-    \url{https://aws.amazon.com/architecture/well-architected/}.
-\end{itemize}
-
-\paragraph{E. DNS pour les Services Web}
-
-\subsubsection*{Question 55 (Moyen) : DNS Round Robin et ses limites}
-
-\reponse
-Le \textbf{DNS Round Robin} consiste à associer \textbf{plusieurs
-enregistrements A} au même nom. Le serveur DNS renvoie les adresses
-dans un ordre qui change à chaque réponse, ce qui répartit les clients
-entre les serveurs.
-
-\textbf{Limites :}
-\begin{itemize}
-    \item \textbf{pas de vérification de santé} : une IP en panne
-    continue d'être distribuée ;
-    \item \textbf{cache DNS} des résolveurs et des clients : la
-    répartition est inégale et les changements sont lents ;
-    \item pas de prise en compte de la charge ni de la capacité des
-    serveurs ;
-    \item pas de persistance de session ;
-    \item le client garde l'IP reçue, même si elle devient lente.
-\end{itemize}
-
-\sources
-\begin{itemize}
-    \item IETF, RFC 1794 : DNS Support for Load Balancing,
-    \url{https://www.rfc-editor.org/rfc/rfc1794}.
-\end{itemize}
-
-\subsubsection*{Question 56 (Avancé) : GeoDNS, DNS Failover, DNS Load Balancing et Anycast}
-
-\reponse
-\begin{itemize}
-    \item \textbf{GeoDNS :} le DNS répond avec une IP différente selon la
-    localisation du client. Il dirige l'utilisateur vers le datacenter
-    le plus proche (latence, conformité légale).
-    \item \textbf{DNS Failover :} des sondes surveillent les serveurs.
-    En cas de panne, le DNS retire l'IP défaillante et renvoie celle du
-    site de secours. Un TTL court (30 à 60 s) accélère la bascule.
-    \item \textbf{DNS Load Balancing :} évolution du Round Robin avec
-    health checks, pondération et prise en compte de la latence
-    (Route 53, Cloudflare Load Balancing).
-    \item \textbf{Anycast :} la même IP est annoncée en BGP depuis
-    plusieurs sites. Le routage Internet envoie chaque client vers le
-    site le plus proche. Il est utilisé par les serveurs DNS racine et
-    les CDN, et résiste bien aux DDoS.
-\end{itemize}
-
-\sources
-\begin{itemize}
-    \item IETF, RFC 4786 : Operation of Anycast Services,
-    \url{https://www.rfc-editor.org/rfc/rfc4786}.
-\end{itemize}
-
-\subsubsection*{Question 57 (Pratique) : Haute disponibilité DNS avec plusieurs datacenters}
-
-\reponse
+\subsubsection*{Flux de requ\^etes}
 \begin{enumerate}
-    \item \textbf{DNS autoritaire redondant :} au moins deux
-    fournisseurs DNS ou un service Anycast, avec des serveurs de noms
-    dans plusieurs régions.
-    \item \textbf{GeoDNS :} chaque région est dirigée vers son
-    datacenter le plus proche (Europe \fl{} DC Paris, Afrique \fl{} DC
-    Alger).
-    \item \textbf{Health checks} (HTTP, TCP) sur chaque datacenter, avec
-    \textbf{DNS Failover} automatique vers un autre site si l'un tombe.
-    \item \textbf{TTL court} (60 s) sur les enregistrements concernés,
-    pour une bascule rapide.
-    \item \textbf{Pondération} pour répartir la charge ou faire une
-    migration progressive.
-    \item \textbf{DNSSEC} pour protéger les réponses.
-    \item Dans chaque datacenter, des load balancers locaux redondants,
-    et des données répliquées entre les sites.
+  \item \textbf{Contenu statique} : client $\rightarrow$ CDN. En cas de \textit{cache hit}, r\'eponse imm\'ediate ; sinon le CDN interroge le reverse proxy, qui r\'ecup\`ere le fichier dans le stockage statique.
+  \item \textbf{API REST} : client $\rightarrow$ CDN (simple relais pour les requ\^etes dynamiques) $\rightarrow$ reverse proxy $\rightarrow$ load balancer L7 $\rightarrow$ serveur d'application $\rightarrow$ Redis, puis base de donn\'ees en cas de miss.
+  \item \textbf{Streaming vid\'eo} : le client t\'el\'echarge le manifeste puis les segments (HLS/DASH) depuis le CDN. En cas de miss, le CDN passe par l'origin shield, puis par le load balancer L4 et les serveurs m\'edia, qui lisent les segments dans le stockage vid\'eo.
 \end{enumerate}
 
-\exemple
-Avec AWS Route 53 : politique de routage par géolocalisation, combinée
-à une politique de basculement et à des health checks sur chaque
-région.
+\subsubsection*{Justification des choix}
 
-\sources
+\noindent
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{2.6cm} Y@{}}
+\toprule
+\textbf{Composant} & \textbf{Choix} & \textbf{Justification} \\
+\midrule
+\textbf{CDN} & CloudFront, Cloudflare ou Fastly &
+Sert statiques et segments vid\'eo au plus pr\`es de l'utilisateur : latence r\'eduite, origine d\'echarg\'ee, pics de trafic absorb\'es. L'\textit{origin shield} limite les requ\^etes vers l'origine en cas de miss multiples. \\
+\midrule
+\textbf{Reverse proxy} & Nginx (ou Traefik) &
+Point d'entr\'ee unique : terminaison TLS centralis\'ee, compression, rate limiting, filtrage/WAF. Les serveurs internes restent en r\'eseau priv\'e et ne sont jamais expos\'es. \\
+\midrule
+\textbf{Load balancer L7 (API)} & HAProxy, algorithme \textit{least connections} &
+Les requ\^etes d'API ont des dur\'ees variables : \textit{least connections} \'evite de surcharger un n\oe ud. Le Layer 7 permet le routage par chemin (\texttt{/api/v1/*}), les \textit{health checks} HTTP et les d\'eploiements blue/green. \\
+\midrule
+\textbf{Load balancer L4 (streaming)} & HAProxy en mode TCP (ou LB cloud L4) &
+Connexions longues et gros d\'ebit : le Layer 4 consomme peu de CPU et n'a pas besoin d'inspecter le contenu. Les segments \'etant d\'ej\`a servis par le CDN, ce LB ne traite que les miss. \\
+\midrule
+\textbf{Serveurs d'application} & Conteneurs (Docker/Kubernetes), au moins 3 instances &
+Applications \textit{stateless} (authentification par JWT, sessions dans Redis) : n'importe quelle instance peut r\'epondre, la mont\'ee en charge horizontale (autoscaling) est simple et la perte d'un n\oe ud est tol\'er\'ee. \\
+\midrule
+\textbf{Cache applicatif} & Redis &
+Garde en m\'emoire les r\'eponses fr\'equentes, les sessions et les r\'esultats de requ\^etes co\^uteuses : moins de lectures sur la base, temps de r\'eponse r\'eduit. \\
+\midrule
+\textbf{Streaming} & HLS/DASH en d\'ebit adaptatif, transcodage hors ligne &
+Vid\'eo d\'ecoup\'ee en petits segments, donc facilement cacheable par le CDN ; plusieurs qualit\'es permettent d'adapter le d\'ebit \`a la connexion du client. \\
+\midrule
+\textbf{Stockage objet} & S3 ou compatible &
+Stockage durable et peu co\^uteux pour les fichiers statiques et les vid\'eos, ind\'ependant des serveurs d'application. \\
+\midrule
+\textbf{Base de donn\'ees} & PostgreSQL : un primaire et des r\'eplicas en lecture, pool de connexions (PgBouncer) &
+Le primaire g\`ere les \'ecritures ; les r\'eplicas absorbent les lectures et assurent le failover. R\'eseau priv\'e uniquement, sauvegardes r\'eguli\`eres. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{E. DNS pour les services web}
+
+
+\subsection*{Question 55: Qu'est-ce que le DNS Round Robin ? Quelles sont ses limitations pour le load balancing ?}
+
+\textbf{D\'efinition :} technique de \textbf{r\'epartition de charge} o\`u un m\^eme nom de domaine (\texttt{www.site.dz}) poss\`ede \textbf{plusieurs enregistrements A} (une IP par serveur). Le DNS renvoie la liste dans un \textbf{ordre tournant} : chaque client re\c{c}oit en premier une IP diff\'erente, donc les requ\^etes se r\'epartissent entre les serveurs.
+
+\textbf{Limitations pour le load balancing :}
 \begin{itemize}
-    \item AWS, Amazon Route 53 Developer Guide,
-    \url{https://docs.aws.amazon.com/route53/}.
+  \item \textbf{Aucune d\'etection de panne} : le DNS continue de donner l'IP d'un serveur mort.
+  \item \textbf{Cache DNS (TTL)} : clients et r\'esolveurs gardent la m\^eme IP, donc la r\'epartition est \textbf{in\'egale}.
+  \item \textbf{Pas de prise en compte de la charge r\'eelle} ni de la \textbf{capacit\'e} des serveurs (tous trait\'es \`a \'egalit\'e).
+  \item \textbf{Pas de persistance de session} : un m\^eme client peut \^etre envoy\'e vers un autre serveur.
+  \item \textbf{Pas d'analyse du contenu} (contrairement \`a un load balancer L7).
 \end{itemize}
 
-% --------------------------------------------------
-\subsection{Membre 9 : API REST, microservices et WebSocket}
-% --------------------------------------------------
-\membre{\dotfill}{58 à 62}
+\textbf{Conclusion :} simple et peu co\^uteux, mais \textbf{grossier}. On le compl\`ete avec des \textbf{health checks}, du \textbf{DNS Failover} et un vrai \textbf{load balancer}.
 
-\paragraph{F. API REST et Microservices}
+\subsection*{Question 56 : GeoDNS, DNS Failover, DNS Load Balancing, Anycast}
 
-\subsubsection*{Question 58 (Facile) : Qu'est-ce qu'une API REST ?}
+\paragraph{GeoDNS}
+\begin{itemize}
+  \item Le DNS renvoie une \textbf{IP diff\'erente selon la localisation} du client.
+  \item Utilisation : \textbf{latence r\'eduite} (datacenter le plus proche), conformit\'e (RGPD), contenu localis\'e.
+\end{itemize}
 
-\reponse
-Une API REST est une interface qui permet à des applications de
-communiquer via HTTP, en manipulant des \textbf{ressources} identifiées
-par des URI (\texttt{/etudiants/12}), le plus souvent en JSON.
+\paragraph{DNS Failover}
+\begin{itemize}
+  \item Des \textbf{health checks} d\'etectent un serveur en panne, et le DNS le \textbf{retire des r\'eponses} vers un serveur de secours.
+  \item Utilisation : \textbf{haute disponibilit\'e}, Disaster Recovery, bascule entre datacenters.
+  \item N\'ecessite un \textbf{TTL court} pour une bascule rapide.
+\end{itemize}
 
-\textbf{Principes fondamentaux (Roy Fielding, 2000) :}
+\paragraph{DNS Load Balancing}
+\begin{itemize}
+  \item R\'epartition du trafic entre plusieurs serveurs via le DNS : \textbf{Round Robin}, \textbf{pond\'er\'e}, selon la latence.
+  \item Utilisation : r\'epartition \textbf{globale} entre datacenters ou load balancers.
+  \item Limite : r\'epartition grossi\`ere (cache DNS), sans prise en compte de la charge r\'eelle.
+\end{itemize}
+
+\paragraph{Anycast}
+\begin{itemize}
+  \item La \textbf{m\^eme IP} est annonc\'ee depuis plusieurs sites via \textbf{BGP}, et le r\'eseau route vers le site le plus proche.
+  \item Utilisation : \textbf{CDN}, serveurs DNS, \textbf{protection DDoS}, r\'esilience sans d\'ependre du TTL.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Diff\'erence cl\'e :} GeoDNS, Failover et DNS LB sont d\'ecid\'es par le \textbf{DNS} (plusieurs IP, d\'ependent du \textbf{TTL}) ; Anycast est d\'ecid\'e par le \textbf{r\'eseau BGP} (IP unique).
+
+\subsection*{Question 57 : DNS haute disponibilit\'e multi-datacenters}
+
 \begin{enumerate}
-    \item \textbf{Client-serveur :} séparation entre l'interface et le
-    stockage des données.
-    \item \textbf{Sans état (stateless) :} chaque requête contient tout
-    ce qu'il faut pour être traitée, le serveur ne garde pas de session.
-    \item \textbf{Mise en cache :} les réponses indiquent si elles
-    peuvent être mises en cache.
-    \item \textbf{Interface uniforme :} URI, méthodes HTTP standards
-    (GET, POST, PUT, DELETE), codes de statut.
-    \item \textbf{Système en couches :} des intermédiaires (proxy, load
-    balancer) peuvent s'insérer de façon transparente.
-    \item \textbf{Code à la demande} (optionnel) : le serveur peut
-    envoyer du code exécutable.
+  \item \textbf{Serveurs DNS autoritaires redondants} : au moins 2, chez des fournisseurs ou sites diff\'erents, en \textbf{Anycast}.
+  \item \textbf{GeoDNS} : chaque r\'egion est dirig\'ee vers son datacenter le plus proche (latence r\'eduite).
+  \item \textbf{Health checks} : surveillance continue de chaque datacenter (HTTP, port).
+  \item \textbf{DNS Failover} : en cas de panne, le datacenter est retir\'e des r\'eponses et le trafic bascule vers un autre.
+  \item \textbf{TTL court} (30 \`a 60\,s) : bascule rapide.
+  \item \textbf{Enregistrements A/AAAA multiples} et \textbf{load balancer local} dans chaque datacenter.
+  \item \textbf{DNS Load Balancing pond\'er\'e} : r\'epartition selon la capacit\'e de chaque site.
+  \item \textbf{DNSSEC} : prot\`ege l'int\'egrit\'e des r\'eponses (contre le spoofing).
+  \item \textbf{R\'eplication des donn\'ees} entre datacenters : bascule transparente.
 \end{enumerate}
 
-\sources
+\noindent\textbf{R\'esum\'e :} Anycast + GeoDNS + Health checks + Failover + TTL court = site disponible m\^eme si un datacenter tombe.
+
+% ====================================================================
+\subsection*{F.API REST et microservices}
+
+\subsection*{Question 58 : API REST}
+
+\textbf{D\'efinition :} une \textbf{API} (Application Programming Interface) permet \`a deux programmes de communiquer. \textbf{REST} (Representational State Transfer) est un \textbf{style d'architecture} pour des API bas\'ees sur \textbf{HTTP}, qui manipulent des \textbf{ressources} identifi\'ees par des \textbf{URL} (ex.\ \texttt{/produits/12}), g\'en\'eralement en \textbf{JSON}.
+
+\textbf{Principes fondamentaux :}
+\begin{enumerate}
+  \item \textbf{Client-serveur} : s\'eparation entre l'interface et les donn\'ees.
+  \item \textbf{Sans \'etat (stateless)} : chaque requ\^ete contient toutes les informations n\'ecessaires.
+  \item \textbf{Ressources identifi\'ees par des URL}.
+  \item \textbf{M\'ethodes HTTP standard} : GET, POST, PUT, PATCH, DELETE.
+  \item \textbf{Repr\'esentations} des ressources (JSON, XML).
+  \item \textbf{Cacheable} : les r\'eponses peuvent \^etre mises en cache.
+  \item \textbf{Interface uniforme} et syst\`eme en \textbf{couches} (proxy, gateway).
+\end{enumerate}
+
+\subsection*{Question 59 : services r\'eseau essentiels}
+
+\paragraph{Service Discovery}
 \begin{itemize}
-    \item R. Fielding, Architectural Styles and the Design of
-    Network-based Software Architectures, thèse, University of
-    California, Irvine, 2000.
+  \item \textbf{DNS} : r\'esout le nom d'un service en IP (DNS interne).
+  \item \textbf{Registre de services} avec \textbf{health checks}.
 \end{itemize}
 
-\subsubsection*{Question 59 (Moyen) : Services réseau essentiels dans une architecture microservices}
-
-\reponse
+\paragraph{Communication inter-services}
 \begin{itemize}
-    \item \textbf{Découverte de services :} un registre (Consul, Eureka,
-    etcd) ou le DNS interne de Kubernetes (CoreDNS) permet à chaque
-    service de trouver les autres, même quand leurs IP changent.
-    \item \textbf{Communication inter-services :} synchrone (REST, gRPC)
-    ou asynchrone (files de messages : Kafka, RabbitMQ). Un
-    \textbf{service mesh} (Istio, Linkerd) peut gérer le chiffrement
-    mTLS, le routage et la répartition de charge.
-    \item \textbf{Monitoring et tracing distribué :} métriques
-    (Prometheus, Grafana), logs centralisés (ELK), traçage d'une requête
-    à travers tous les services (OpenTelemetry, Jaeger).
-    \item \textbf{Gestion des échecs :}
-    \begin{itemize}
-        \item \textbf{Retry} avec attente exponentielle
-        (\textit{exponential backoff}) pour les erreurs temporaires ;
-        \item \textbf{Circuit Breaker} : après plusieurs échecs, les
-        appels vers le service défaillant sont coupés pendant un temps,
-        pour éviter les pannes en cascade (Resilience4j, Istio) ;
-        \item \textbf{timeouts} et réponses de secours (\textit{fallback}).
-    \end{itemize}
+  \item \textbf{HTTP/HTTPS} (API REST) et \textbf{gRPC}.
+  \item \textbf{Message broker} (communication asynchrone).
+  \item \textbf{Load balancer} : r\'epartit les requ\^etes entre les instances.
+  \item \textbf{API Gateway} : point d'entr\'ee unique.
+  \item \textbf{TLS/mTLS} : s\'ecurise les \'echanges.
 \end{itemize}
 
-\sources
+\paragraph{Monitoring et tracing distribu\'e}
 \begin{itemize}
-    \item M. Fowler, CircuitBreaker,
-    \url{https://martinfowler.com/bliki/CircuitBreaker.html}.
+  \item \textbf{SNMP} : supervision de l'infrastructure.
+  \item \textbf{Syslog} : centralisation des logs.
+  \item Monitoring des m\'etriques (\textbf{Prometheus/Grafana}).
+  \item \textbf{Tracing distribu\'e} (trace ID propag\'e entre services).
+  \item \textbf{NTP} : synchronisation des horloges, indispensable pour ordonner les logs et les traces.
 \end{itemize}
 
-\subsubsection*{Question 60 (Avancé) : Rôle d'une API Gateway}
-
-\reponse
-L'API Gateway est le \textbf{point d'entrée unique} des clients vers
-les microservices. Elle cache la complexité interne : le client
-n'appelle qu'une seule adresse.
-
-\textbf{Fonctionnalités attendues :}
+\paragraph{Gestion des \'echecs}
 \begin{itemize}
-    \item routage des requêtes vers le bon microservice ;
-    \item authentification et autorisation (OAuth2, JWT, clés d'API) ;
-    \item limitation de débit (\textit{rate limiting}) et quotas ;
-    \item terminaison TLS ;
-    \item agrégation de plusieurs appels en une seule réponse ;
-    \item transformation de protocoles et de formats (REST vers gRPC) ;
-    \item cache, journalisation, métriques et traçage ;
-    \item gestion des versions d'API.
+  \item \textbf{Load balancer} avec \textbf{health checks} : retire les instances d\'efaillantes.
+  \item \textbf{Circuit Breaker} : stoppe les appels vers un service en panne.
+  \item \textbf{Retry} avec backoff, \textbf{timeout}.
+  \item \textbf{DNS Failover} : bascule vers un autre site.
 \end{itemize}
 
-\exemple
-Kong, NGINX, Spring Cloud Gateway, AWS API Gateway.
+\subsection*{Question 60 : API Gateway}
 
-\sources
+\textbf{R\^ole :} point d'entr\'ee \textbf{unique} entre les clients et les microservices. Les clients ne parlent qu'\`a elle, qui \textbf{route} chaque requ\^ete vers le bon service et masque l'architecture interne (c'est un \textbf{reverse proxy} sp\'ecialis\'e pour les API).
+
+\textbf{Fonctionnalit\'es :}
 \begin{itemize}
-    \item C. Richardson, Pattern: API Gateway,
-    \url{https://microservices.io/patterns/apigateway.html}.
+  \item \textbf{Routage} : redirige chaque requ\^ete vers le bon microservice.
+  \item \textbf{Authentification et autorisation} : JWT, OAuth2, cl\'es d'API.
+  \item \textbf{Rate limiting / quotas} : limite le nombre de requ\^etes (contre les abus et le DDoS).
+  \item \textbf{Load balancing} : r\'epartit la charge entre les instances.
+  \item \textbf{Agr\'egation} : combine plusieurs appels en une seule r\'eponse.
+  \item \textbf{Terminaison TLS} : g\`ere le HTTPS \`a un seul endroit.
+  \item \textbf{Transformation} : conversion de protocoles et de formats (REST, gRPC, JSON).
+  \item \textbf{Cache et compression} : meilleures performances.
+  \item \textbf{Monitoring et logs} : m\'etriques, tra\c{c}abilit\'e des requ\^etes.
+  \item \textbf{R\'esilience} : Circuit Breaker, retry, timeout.
+  \item \textbf{Versioning} des API.
 \end{itemize}
 
-\paragraph{G. WebSocket et Communication en Temps Réel}
+\noindent\textbf{Exemples :} Kong, NGINX, AWS API Gateway.
 
-\subsubsection*{Question 61 (Moyen) : HTTP classique et WebSocket}
+% ====================================================================
+\subsection*{G.WebSocket et communication en temps r\'eel}
 
-\reponse
+\subsection*{Question 61 : HTTP classique vs WebSocket}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{@{}l Y Y@{}}
+\toprule
+ & \textbf{HTTP classique} & \textbf{WebSocket} \\
+\midrule
+\textbf{Mod\`ele} & Requ\^ete $\rightarrow$ r\'eponse, puis la connexion se ferme & Connexion \textbf{persistante} \\
+\textbf{Direction} & Le \textbf{client} initie toujours & \textbf{Bidirectionnelle} (le serveur peut envoyer en premier) \\
+\textbf{En-t\^etes} & R\'ep\'et\'es \`a chaque requ\^ete & L\'egers apr\`es le \textbf{handshake} \\
+\textbf{Latence} & Plus \'elev\'ee & \textbf{Tr\`es faible} \\
+\textbf{Protocole} & \texttt{http://}, \texttt{https://} & \texttt{ws://}, \texttt{wss://} (chiffr\'e) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Fonctionnement :} la connexion d\'emarre par une requ\^ete HTTP avec l'en-t\^ete \texttt{Upgrade: websocket}, puis passe en mode permanent.
+
+\textbf{Cas d'usage o\`u WebSocket est pr\'ef\'erable (temps r\'eel) :}
 \begin{itemize}
-    \item \textbf{HTTP classique :} modèle requête/réponse. Seul le
-    client peut initier un échange, et chaque requête porte des
-    en-têtes complets. Le serveur ne peut pas envoyer de données de
-    lui-même.
-    \item \textbf{WebSocket :} après une négociation HTTP
-    (\texttt{Upgrade: websocket}), la connexion TCP reste
-    \textbf{ouverte}, \textbf{bidirectionnelle} et \textbf{full-duplex}.
-    Client et serveur envoient des messages à tout moment, avec très
-    peu de surcharge (ws:// ou wss:// avec TLS).
+  \item \textbf{Chat} et messagerie instantan\'ee.
+  \item \textbf{Jeux en ligne} multijoueurs.
+  \item \textbf{Trading} et cours de bourse en direct.
+  \item \textbf{\'Edition collaborative} (type Google Docs).
+  \item \textbf{Notifications instantan\'ees} et tableaux de bord en direct.
 \end{itemize}
 
-\textbf{Cas où WebSocket est préférable :} chat et messagerie
-instantanée, jeux en ligne, tableaux de bord temps réel, trading,
-édition collaborative, notifications instantanées.
+\subsection*{Question 62 : Comparez les diff\'erentes technologies de communication en temps r\'eel (WebSocket, SSE, Long Polling, HTTP/2 Server Push). Pour chaque technologie, donnez un cas d'usage appropri\'e.}
 
-\sources
+\begin{table}[H]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\hsize=.6\hsize\raggedright\arraybackslash\bfseries}X >{\hsize=1.1\hsize\raggedright\arraybackslash}X >{\hsize=1.1\hsize\raggedright\arraybackslash}X >{\hsize=1.1\hsize\raggedright\arraybackslash}X >{\hsize=1.1\hsize\raggedright\arraybackslash}X@{}}
+\toprule
+ & \textbf{WebSocket} & \textbf{SSE} & \textbf{Long Polling} & \textbf{HTTP/2 Server Push} \\
+\midrule
+Principe & Connexion persistante apr\`es un handshake HTTP (\texttt{Upgrade}) & Flux continu sur une seule connexion HTTP & Le client demande, le serveur attend d'avoir du nouveau avant de r\'epondre, puis le client redemande & Le serveur envoie \`a l'avance des ressources qu'il sait n\'ecessaires \\
+Direction & \textbf{Bidirectionnelle} & Serveur $\rightarrow$ client & Simul\'ee (requ\^etes r\'ep\'et\'ees) & Serveur $\rightarrow$ client \\
+Latence & Tr\`es faible & Faible & Moyenne \`a \'elev\'ee & Non applicable \\
+Avantages & Temps r\'eel complet, en-t\^etes l\'egers & Simple, reconnexion automatique & Compatible partout & Chargement de page acc\'el\'er\'e \\
+Limites & Plus complexe (proxys, load balancers) & Unidirectionnel & Co\^uteux (requ\^etes et en-t\^etes r\'ep\'et\'es) & Pas du vrai temps r\'eel, abandonn\'e par les navigateurs \\
+\midrule
+Cas d'usage & \textbf{Chat}, jeu multijoueur, \'edition collaborative & \textbf{Notifications}, flux d'actualit\'es, tableau de bord en direct & \textbf{Solution de repli} (anciens navigateurs, proxys restrictifs) & \textbf{Pr\'echargement} de CSS/JS d'une page \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%==================================================
+\subsection*{Synth\`ese de la Partie 4}
+%==================================================
+
+Cette partie couvre la \textbf{cha\^ine compl\`ete de delivery web}, de la couche protocolaire \`a l'infrastructure de distribution :
+
 \begin{itemize}
-    \item IETF, RFC 6455 : The WebSocket Protocol,
-    \url{https://www.rfc-editor.org/rfc/rfc6455}.
+  \item \textbf{Protocoles et s\'emantique HTTP} : \'evolution HTTP/1.1 $\rightarrow$ HTTP/2 $\rightarrow$ HTTP/3 (fil conducteur : la lutte contre le \textit{head-of-line blocking}), HTTPS et les trois garanties TLS (authentification, confidentialit\'e, int\'egrit\'e), m\'ethodes et codes de statut (2xx, 3xx, 4xx, 5xx).
+  \item \textbf{Interm\'ediaires r\'eseau} : proxy/reverse proxy, CDN, load balancers (algorithmes, Layer 4 vs Layer 7) et DNS (Round Robin, GeoDNS, Failover, Anycast) --- chacun centralise une responsabilit\'e transverse (TLS, cache, r\'epartition, filtrage).
+  \item \textbf{Architectures applicatives} : REST (stateless sur HTTP), microservices (discovery, communication, monitoring, gestion des \'echecs) et API Gateway (point d'entr\'ee unique).
+  \item \textbf{Temps r\'eel} : WebSocket (bidirectionnel), SSE (unidirectionnel), Long Polling (repli), Server Push (pr\'echargement).
+  \item \textbf{Architecture de r\'ef\'erence} : CDN $\rightarrow$ reverse proxy $\rightarrow$ LB L7/L4 $\rightarrow$ serveurs stateless $\rightarrow$ cache $\rightarrow$ base r\'epliqu\'ee, chaque composant \'etant choisi selon la nature du trafic.
 \end{itemize}
 
-\subsubsection*{Question 62 (Pratique) : Comparaison des technologies temps réel}
-
-\reponse
-\begin{longtable}{|L{2.6cm}|L{6.2cm}|L{5.8cm}|}
-\hline
-\textbf{Technologie} & \textbf{Fonctionnement} & \textbf{Cas d'usage
-approprié} \\ \hline
-\endhead
-WebSocket & Connexion persistante, bidirectionnelle. & Chat, jeux
-multijoueurs, édition collaborative. \\ \hline
-Server-Sent Events (SSE) & Flux HTTP persistant, du serveur vers le
-client uniquement, reconnexion automatique. & Fil d'actualités, cours
-de bourse, notifications, suivi de commande. \\ \hline
-Long Polling & Le client envoie une requête que le serveur garde ouverte
-jusqu'à avoir une donnée, puis le client relance. & Solution de repli
-pour les anciens navigateurs ou les réseaux qui bloquent WebSocket. \\
-\hline
-HTTP/2 Server Push & Le serveur envoie des ressources liées à une
-requête avant qu'elles soient demandées. & Précharger CSS et JS d'une
-page. Ce n'est pas un vrai canal temps réel, et il est aujourd'hui
-abandonné par les navigateurs. \\ \hline
-\end{longtable}
-
-\sources
-\begin{itemize}
-    \item WHATWG, HTML Living Standard : Server-sent events,
-    \url{https://html.spec.whatwg.org/multipage/server-sent-events.html}.
-    \item IETF, RFC 6455, \url{https://www.rfc-editor.org/rfc/rfc6455}.
-\end{itemize}
+\noindent\textbf{Id\'ee centrale :} chaque couche apporte \textbf{performance}, \textbf{s\'ecurit\'e}, \textbf{disponibilit\'e} et \textbf{scalabilit\'e}. La tendance est \`a la \textbf{centralisation des responsabilit\'es transverses} (TLS, auth, cache, s\'ecurit\'e) dans des composants d\'edi\'es, afin de garder les serveurs applicatifs \textbf{simples, stateless et scalables horizontalement}. La ma\^itrise de ces briques --- et surtout de leurs \textbf{limites} (head-of-line blocking, cache DNS/TTL, WebSockets derri\`ere proxys) --- est la cl\'e d'architectures web \textbf{robustes, performantes et r\'esilientes}.
 
 % --------------------------------------------------
 \subsection{Membre 10 : Routage avancé}
