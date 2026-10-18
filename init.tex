@@ -1,0 +1,2924 @@
+\documentclass[12pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{textcomp}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.25}
+
+\titleformat{\section}
+  {\Large\bfseries\color{blue!60!black}}
+  {\thesection}{0.7em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries}
+  {\thesubsection}{0.7em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{blue!40!black}}
+  {\thesubsubsection}{0.7em}{}
+
+\titleformat{\paragraph}[hang]
+  {\normalsize\bfseries\color{blue!60!black}}
+  {}{0pt}{}
+\titlespacing*{\paragraph}{0pt}{10pt}{4pt}
+
+% ---------- Commandes utiles ----------
+% Bloc d'en-tête de chaque membre
+\newcommand{\membre}[2]{%
+  \textbf{Nom et prénom :} #1 \par
+  \textbf{Questions :} #2 \par
+}
+% Rubriques du modèle de réponse
+\newcommand{\reponse}{\textbf{Réponse :}\par}
+\newcommand{\exemple}{\textbf{Exemple ou application pratique :}\par}
+\newcommand{\sources}{\textbf{Source(s) :}}
+% Flèche
+\newcommand{\fl}{\ensuremath{\rightarrow}}
+% Colonnes de tableaux alignées à gauche
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% ---------- Informations du TP ----------
+\newcommand{\matiere}{Services Réseaux}
+\newcommand{\groupe}{Groupe de 14 étudiants}
+\newcommand{\universite}{USTHB}
+\newcommand{\annee}{2026--2027}
+
+% ---------- Document ----------
+\begin{document}
+
+% ---------- Page de garde ----------
+\begin{titlepage}
+    \centering
+
+    {\large République Algérienne Démocratique et Populaire \par}
+    \vspace{0.2cm}
+    {\large Ministère de l'Enseignement Supérieur et de la Recherche Scientifique \par}
+    \vspace{0.6cm}
+    {\Large \textbf{Université des Sciences et de la Technologie Houari Boumediene} (\universite) \par}
+    \vspace{0.2cm}
+    {\large Département d'Informatique \par}
+    \vspace{1.5cm}
+
+    {\Huge\bfseries TP 1 \par}
+    \vspace{0.5cm}
+
+    {\LARGE Découverte des Services Réseaux \par}
+    \vspace{1.5cm}
+
+    \rule{\textwidth}{0.5pt}
+
+    \vspace{0.7cm}
+    {\large Répartition du travail et réponses aux questions \par}
+    \vspace{0.7cm}
+
+    \rule{\textwidth}{0.5pt}
+
+    \vspace{1.5cm}
+
+    \textbf{Module :} ADV Réseau -- \matiere
+
+    \textbf{Année universitaire :} \annee
+
+    \vfill
+
+    \textbf{Membres du groupe :} voir la répartition ci-dessous.
+
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==================================================
+\section{Consignes générales}
+% ==================================================
+
+Ce document présente la répartition du TP entre les
+14 membres du groupe.
+
+Chaque membre doit :
+\begin{itemize}
+    \item traiter les questions qui lui sont attribuées ;
+    \item rédiger des réponses claires, structurées et précises ;
+    \item ajouter une source fiable pour chaque réponse ;
+    \item fournir des exemples ou des schémas lorsque nécessaire ;
+    \item vérifier les informations avant de les intégrer au document final.
+\end{itemize}
+
+Les réponses doivent être rédigées avec les propres mots
+des étudiants. Les sources utilisées doivent être citées
+dans le texte et regroupées dans la bibliographie finale.
+
+% ==================================================
+\section{Répartition du travail et réponses}
+% ==================================================
+
+% --------------------------------------------------
+\subsection{Membre 1 : DNS}
+% --------------------------------------------------
+\membre{\dotfill}{1 à 5}
+
+\paragraph{A. DNS (Domain Name System)}
+
+\subsubsection*{Question 1 (Facile) : Rôle principal du DNS}
+
+\reponse
+Le DNS traduit les noms de domaine lisibles par l'humain en adresses IP
+exploitables par les machines. Il évite ainsi de mémoriser des adresses
+numériques et permet de changer l'adresse d'un serveur sans modifier son
+nom. Il fournit aussi d'autres informations via différents types
+d'enregistrements.
+
+\subsubsection*{Question 2 (Moyen) : Serveur DNS autoritaire, serveur DNS récursif et résolveur DNS}
+
+\reponse
+La différence entre un serveur DNS autoritaire, un serveur DNS récursif
+et un résolveur DNS :
+
+\begin{longtable}{|L{3.4cm}|L{11.6cm}|}
+\hline
+\textbf{Serveur DNS autoritaire} &
+Le serveur DNS autoritaire est le serveur officiel qui détient les
+véritables dossiers d'un nom de domaine spécifique. Détient les données
+officielles d'une zone (ex. universite.dz) et répond avec autorité pour
+les noms de cette zone. Il ne cherche pas ailleurs : le serveur
+autoritaire répond uniquement sur ce qu'il gère (réponse définitive et
+exacte). \\ \hline
+\textbf{Serveur DNS récursif} &
+Le serveur DNS récursif est un serveur distant (généralement géré par
+notre fournisseur d'accès à Internet ou par des services publics).
+
+Il reçoit la requête d'un client et fait tout le travail de résolution
+à sa place en interrogeant et en parcourant toute la hiérarchie
+d'Internet (les serveurs Racines, puis les serveurs TLD comme le .com ou
+.fr) et à chaque recherche il conserve les résultats en cache pour ne
+pas refaire tout le travail pendant une durée limitée. \\ \hline
+\textbf{Résolveur DNS} &
+Le résolveur DNS est un composant logiciel léger, généralement intégré
+directement à notre système d'exploitation (Windows, macOS, Linux) ou à
+notre navigateur web. Il sert d'intermédiaire de premier niveau.
+Lorsqu'on tape une adresse web, il regarde d'abord dans son cache local.
+S'il ne connaît pas la réponse, il formule la requête et l'envoie au
+serveur DNS récursif configuré sur notre réseau (comme celui des box
+internet). \\ \hline
+\end{longtable}
+
+\subsubsection*{Question 3 (Avancé) : Analyse du processus de résolution du nom www.universite.dz}
+
+\reponse
+\underline{Étape 1 : Vérification du cache local}
+
+L'ordinateur (le résolveur local) vérifie d'abord son propre cache
+système ou celui du navigateur web.
+
+Résultat : si vous avez visité www.universite.dz récemment, l'adresse
+IP est trouvée immédiatement sur votre machine. Zéro requête sur
+Internet, la réponse est instantanée.
+
+\underline{Étape 2 : L'interrogation du serveur Racine (Root)}
+
+Action : n'ayant pas la réponse en mémoire, le serveur récursif initie
+la recherche au sommet de la hiérarchie internet.
+
+Serveurs impliqués : le serveur DNS récursif interroge l'un des 13
+serveurs Racines (Root Servers, «~.~»).
+
+Réponse : le serveur racine ne connaît pas l'IP finale, mais il renvoie
+les adresses des serveurs gérant l'extension de premier niveau (TLD)
+.dz.
+
+\underline{Étape 3 : L'interrogation du serveur TLD .dz}
+
+Action : le serveur récursif descend d'un niveau dans l'arbre DNS.
+
+Serveurs impliqués : le serveur DNS récursif contacte l'un des serveurs
+de premier niveau (TLD Server) chargés de la zone .dz (gérée en Algérie
+par le CERIST).
+
+Réponse : le serveur TLD .dz renvoie l'adresse du serveur DNS
+autoritaire délégué officiellement pour gérer le domaine de second
+niveau universite.dz.
+
+\underline{Étape 4 : L'interrogation du serveur Autoritaire}
+
+Action : le serveur récursif s'adresse directement à la source
+officielle de l'information.
+
+Serveurs impliqués : le serveur DNS récursif interroge le serveur DNS
+autoritaire du domaine universite.dz (hébergé par l'université ou son
+prestataire).
+
+Réponse : ce serveur lit son fichier de zone, trouve l'enregistrement
+de type A (IPv4) correspondant à l'hôte www, et renvoie l'adresse IPv4
+finale.
+
+\underline{Étape 5 : Transmission finale et mise en cache}
+
+Action : la réponse effectue le chemin inverse pour clore le processus.
+
+Serveurs impliqués : le serveur DNS récursif reçoit l'IP, en stocke une
+copie dans sa mémoire cache (selon la durée définie par le TTL) pour
+accélérer les futures demandes, puis transmet cette IP au résolveur
+local du client.
+
+Résultat : le navigateur du client utilise l'IP obtenue pour initier la
+connexion vers le serveur web hébergeant le site de l'université.
+
+\subsubsection*{Question 4 (Pratique) : Les enregistrements DNS qu'on utilise}
+
+\reponse
+\begin{itemize}
+    \item Nom vers adresse IPv4 : \textbf{A}.
+    \item Serveur de messagerie : \textbf{MX}.
+    \item Alias vers un autre nom : \textbf{CNAME}.
+    \item Nom vers adresse IPv6 : \textbf{AAAA}.
+\end{itemize}
+
+\subsubsection*{Question 5 (Réflexion) : Pourquoi DNSSEC est-il important ?}
+
+\reponse
+Le DNS a été conçu sans mécanisme d'authentification : un résolveur qui
+reçoit une réponse n'a aucun moyen de vérifier qu'elle provient bien du
+serveur légitime ni qu'elle n'a pas été modifiée en route. Un attaquant
+peut donc fournir de fausses réponses, et l'utilisateur est redirigé
+vers un site malveillant sans s'en apercevoir.
+
+\begin{longtable}{|L{4.5cm}|L{10.5cm}|}
+\hline
+Empoisonnement de cache & Injection de fausses données dans le cache
+d'un résolveur \\ \hline
+Spoofing DNS & Usurpation de réponses DNS pour rediriger vers un faux
+serveur \\ \hline
+Attaque de l'homme du milieu (MITM) & Modification des réponses DNS en
+transit \\ \hline
+Redirection / pharming & Envoi des utilisateurs vers un faux site
+(phishing, vol d'identifiants, malware) \\ \hline
+\end{longtable}
+
+\underline{Limites à connaître :}
+\begin{itemize}
+    \item DNSSEC ne chiffre pas les requêtes : il n'assure pas la
+    confidentialité (pour cela : DoT ou DoH).
+    \item Il ne protège pas contre les attaques DDoS et peut même
+    augmenter la taille des réponses, ce qui favorise l'amplification.
+    \item Il protège la résolution DNS, mais pas le site de destination
+    lui-même (HTTPS/TLS reste nécessaire).
+    \item Son déploiement est complexe (gestion et rotation des clés) et
+    n'est pas encore universel.
+\end{itemize}
+
+\underline{Importance du DNSSEC :}
+
+DNSSEC est important parce qu'il rend le DNS vérifiable, ce qui garantit
+que l'on atteint bien la bonne destination. C'est un maillon essentiel
+de la sécurité de l'infrastructure Internet.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 1034 et RFC 1035 : Domain Names,
+    \url{https://www.rfc-editor.org/rfc/rfc1035}.
+    \item IETF, RFC 4033 : DNS Security Introduction and Requirements,
+    \url{https://www.rfc-editor.org/rfc/rfc4033}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 2 : DHCP et NTP}
+% --------------------------------------------------
+\membre{\dotfill}{6 à 12}
+
+\paragraph{B. DHCP (Dynamic Host Configuration Protocol)}
+
+\subsubsection*{Question 6 (Facile) : Les 4 étapes du processus DHCP (DORA)}
+
+\reponse
+\begin{longtable}{|L{2.4cm}|L{2.9cm}|L{2.9cm}|L{6.4cm}|}
+\hline
+\textbf{Étape} & \textbf{Message} & \textbf{Sens} & \textbf{Explication} \\ \hline
+\endhead
+Discover & DHCPDISCOVER & Client \fl{} tous (broadcast) &
+Le client, qui n'a pas encore d'adresse IP, diffuse une requête pour
+trouver un serveur DHCP sur le réseau. \\ \hline
+Offer & DHCPOFFER & Serveur \fl{} client &
+Un serveur DHCP répond en proposant une adresse IP disponible, avec les
+paramètres associés (masque, passerelle, DNS, durée du bail). \\ \hline
+Request & DHCPREQUEST & Client \fl{} serveur (broadcast) &
+Le client accepte l'offre reçue et demande officiellement cette adresse.
+Le broadcast informe aussi les autres serveurs que leur offre est
+refusée. \\ \hline
+Acknowledge & DHCPACK & Serveur \fl{} client &
+Le serveur confirme l'attribution : l'adresse est réservée au client
+pour la durée du bail et le client peut l'utiliser. \\ \hline
+\end{longtable}
+
+\underline{Remarques :}
+\begin{itemize}
+    \item Les échanges utilisent UDP, port 67 côté serveur et port 68
+    côté client.
+    \item Au moment du Discover, le client utilise l'adresse source
+    0.0.0.0 et l'adresse destination 255.255.255.255.
+    \item Le bail (lease) a une durée limitée : le client le renouvelle
+    généralement à 50~\% de sa durée (T1).
+\end{itemize}
+
+\subsubsection*{Question 7 (Moyen) : Informations fournies en plus de l'adresse IP}
+
+\reponse
+Un serveur DHCP peut distribuer, via des options DHCP, toute la
+configuration réseau du client :
+\begin{itemize}
+    \item Masque de sous-réseau
+    \item Passerelle par défaut (routeur)
+    \item Serveurs DNS
+    \item Nom de domaine / suffixe DNS
+    \item Serveurs NTP
+    \item Durée du bail (lease time)
+    \item Serveur TFTP et nom du fichier de démarrage (boot PXE)
+    \item Paramètres spécifiques à un fabricant (ex. : adresse du
+    contrôleur Wi-Fi, du serveur de téléphonie IP)
+    \item Liste de recherche de domaines et des serveurs WINS, des
+    réservations (adresse fixe liée à une adresse MAC) et des paramètres
+    de renouvellement (T1, T2).
+\end{itemize}
+
+\subsubsection*{Question 8 (Avancé) : Serveur DHCP sur un autre VLAN}
+
+\reponse
+\textbf{Problème :} le DHCPDISCOVER est un broadcast, qui reste confiné
+au VLAN (domaine de diffusion) du client. Il ne peut donc pas atteindre
+un serveur situé dans un autre VLAN.
+
+\textbf{Solution :} le \textbf{DHCP Relay} (agent de relais), aussi
+appelé \texttt{ip helper-address} sur Cisco.
+
+\textbf{Fonctionnement :}
+\begin{itemize}
+    \item Le client diffuse son DHCPDISCOVER dans son VLAN.
+    \item Le routeur ou switch L3 qui porte l'interface (SVI) de ce
+    VLAN, configuré en relais DHCP, reçoit le broadcast.
+    \item Il le convertit en unicast et le transmet directement au
+    serveur DHCP, en renseignant le champ \textbf{giaddr} (Gateway IP
+    Address) avec l'adresse IP de son interface côté client.
+    \item Le serveur utilise giaddr pour savoir de quel sous-réseau
+    provient la demande et choisit l'adresse dans le pool
+    correspondant.
+    \item La réponse (Offer, puis Ack) repart en unicast vers le relais,
+    qui la retransmet au client.
+\end{itemize}
+
+\subsubsection*{Question 9 (Cas pratique) : Bail DHCP de 8 heures}
+
+\reponse
+À T1 = 50~\% du bail = 4 heures. Le client envoie un DHCPREQUEST en
+unicast au serveur qui lui a attribué l'adresse. Si le serveur répond
+par un DHCPACK, le bail est prolongé pour une nouvelle durée complète de
+8 heures.
+
+\textbf{Que se passe-t-il si le serveur ne répond pas ?}
+
+\begin{longtable}{|L{3.2cm}|L{3.8cm}|L{7.6cm}|}
+\hline
+\textbf{Moment} & \textbf{Phase} & \textbf{Action du client} \\ \hline
+4 h (T1) & Renouvellement (\textit{renewing}) & DHCPREQUEST en unicast
+vers le serveur d'origine. Il réessaie régulièrement s'il n'obtient pas
+de réponse. \\ \hline
+7 h (T2 = 87,5~\%) & Rebinding & DHCPREQUEST en \textbf{broadcast} vers
+n'importe quel serveur DHCP du réseau. \\ \hline
+8 h & Expiration du bail & Le client \textbf{doit abandonner l'adresse}
+et relancer le processus DORA depuis le début. \\ \hline
+\end{longtable}
+
+Si aucun serveur ne répond à l'expiration :
+\begin{itemize}
+    \item Le client perd sa configuration IP et ne peut plus communiquer
+    normalement.
+    \item Sous Windows, il s'attribue une adresse APIPA (169.254.x.x),
+    utilisable uniquement en local.
+\end{itemize}
+
+\textbf{Conclusion :} T1 = 50~\% et T2 = 87,5~\% sont les valeurs par
+défaut définies par la RFC 2131, mais le serveur peut les modifier via
+les options 58 (T1) et 59 (T2).
+
+\paragraph{C. NTP (Network Time Protocol)}
+
+\subsubsection*{Question 10 (Facile) : Pourquoi la synchronisation temporelle est-elle critique dans un réseau d'entreprise ?}
+
+\reponse
+Le NTP (Network Time Protocol) est un protocole qui permet de
+synchroniser les horloges des serveurs, des routeurs, des switches et
+des autres équipements réseau. En entreprise, cette synchronisation est
+essentielle pour garantir la cohérence des journaux (logs), faciliter le
+dépannage, renforcer la sécurité et assurer la traçabilité des
+opérations.
+
+\subsubsection*{Question 11 (Moyen) : Le concept de « stratum » dans NTP}
+
+\reponse
+Le stratum représente le niveau hiérarchique d'un serveur NTP par
+rapport à une référence de temps.
+\begin{itemize}
+    \item \textbf{Stratum 1 :} serveur directement synchronisé sur une
+    source de temps de référence, comme une horloge GPS ou une horloge
+    atomique.
+    \item \textbf{Stratum 2 :} serveur synchronisé sur un ou plusieurs
+    serveurs de stratum 1.
+    \item \textbf{Stratum 3 :} serveur synchronisé sur un serveur de
+    stratum 2.
+\end{itemize}
+
+\subsubsection*{Question 12 (Réflexion) : 3 exemples de services dépendant d'une synchronisation temporelle précise}
+
+\reponse
+\begin{enumerate}
+    \item \textbf{SIEM et cybersécurité}
+
+    Les outils SIEM collectent et analysent les logs provenant des
+    serveurs, des pare-feu et des systèmes de détection d'intrusion. Une
+    heure synchronisée permet de corréler les événements et de
+    reconstituer la chronologie d'une cyberattaque.
+
+    \item \textbf{Authentification et sécurité (Kerberos)}
+
+    Le protocole Kerberos utilise des horodatages pour sécuriser
+    l'authentification et limiter certaines attaques par rejeu. Une
+    différence d'heure trop importante entre le client et le serveur
+    peut provoquer des échecs d'authentification.
+
+    \item \textbf{Transactions financières et applications métiers}
+
+    Les systèmes financiers utilisent des horodatages pour assurer la
+    traçabilité des opérations, faciliter les audits et reconstituer
+    l'ordre des transactions. Une heure cohérente est également
+    importante pour les journaux des applications métiers.
+\end{enumerate}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 2131 : Dynamic Host Configuration Protocol ;
+    RFC 2132 : DHCP Options and BOOTP Vendor Extensions,
+    \url{https://www.rfc-editor.org/rfc/rfc2131}.
+    \item IETF, RFC 5905 : Network Time Protocol Version 4,
+    \url{https://www.rfc-editor.org/rfc/rfc5905}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 3 : LDAP et RADIUS/TACACS+}
+% --------------------------------------------------
+\membre{\dotfill}{13 à 20}
+
+\paragraph{A. LDAP (Lightweight Directory Access Protocol)}
+
+\subsubsection*{Question 13 (Facile) : Qu'est-ce qu'un annuaire LDAP et à quoi sert-il ?}
+
+\reponse
+Un annuaire LDAP est une base de données spécialisée, organisée en
+arbre, qui stocke des informations sur les ressources d'une
+organisation : utilisateurs, groupes, ordinateurs, imprimantes,
+services. LDAP est le protocole standard (TCP 389, ou 636 pour LDAPS)
+qui permet de consulter et de modifier cet annuaire.
+
+Il est optimisé pour la \textbf{lecture et la recherche rapides}, et non
+pour les écritures fréquentes. Dans une organisation, il sert à :
+\begin{itemize}
+    \item \textbf{centraliser les identités} : un seul compte par
+    utilisateur pour tous les services (messagerie, VPN, Wi-Fi, ENT) ;
+    \item \textbf{authentifier} les utilisateurs (opération \textit{bind}) ;
+    \item gérer les \textbf{groupes et les droits d'accès} ;
+    \item fournir un \textbf{carnet d'adresses} commun (nom, e-mail,
+    téléphone, service).
+\end{itemize}
+
+\exemple
+À l'université, un étudiant utilise le même identifiant pour le Wi-Fi,
+la plateforme e-learning et la messagerie : chaque service interroge le
+même annuaire LDAP.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4511 : LDAP -- The Protocol,
+    \url{https://www.rfc-editor.org/rfc/rfc4511}.
+\end{itemize}
+
+\subsubsection*{Question 14 (Moyen) : Structure hiérarchique d'un annuaire LDAP (DN, CN, OU, DC)}
+
+\reponse
+L'annuaire est organisé en arbre appelé \textbf{DIT} (Directory
+Information Tree). Chaque nœud est une \textbf{entrée} composée
+d'attributs.
+
+\begin{longtable}{|L{2.2cm}|L{4.6cm}|L{7.8cm}|}
+\hline
+\textbf{Terme} & \textbf{Signification} & \textbf{Rôle} \\ \hline
+\textbf{DC} & Domain Component & Composant du nom de domaine, placé à la
+racine de l'arbre (ex. \texttt{dc=universite,dc=dz}). \\ \hline
+\textbf{OU} & Organizational Unit & Conteneur qui regroupe des entrées
+(département, service, type d'objet). \\ \hline
+\textbf{CN} & Common Name & Nom d'un objet final : utilisateur, groupe,
+machine. \\ \hline
+\textbf{DN} & Distinguished Name & Identifiant unique et complet d'une
+entrée : chemin depuis l'entrée jusqu'à la racine. \\ \hline
+\end{longtable}
+
+Le DN se lit de gauche à droite, de l'élément le plus précis vers la
+racine. La partie la plus à gauche est le \textbf{RDN} (Relative
+Distinguished Name).
+
+\exemple
+\begin{verbatim}
+dc=universite,dc=dz
+ |-- ou=Informatique
+ |     |-- cn=Ahmed Benali
+ |-- ou=Mathematiques
+\end{verbatim}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4512 : LDAP Directory Information Models,
+    \url{https://www.rfc-editor.org/rfc/rfc4512}.
+\end{itemize}
+
+\subsubsection*{Question 15 (Pratique) : DN complet de l'utilisateur « Ahmed Benali »}
+
+\reponse
+\begin{center}
+\texttt{CN=Ahmed Benali,OU=Informatique,DC=universite,DC=dz}
+\end{center}
+
+\begin{itemize}
+    \item \texttt{CN=Ahmed Benali} : l'utilisateur ;
+    \item \texttt{OU=Informatique} : son département ;
+    \item \texttt{DC=universite,DC=dz} : le domaine universite.dz.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4514 : LDAP String Representation of Distinguished
+    Names, \url{https://www.rfc-editor.org/rfc/rfc4514}.
+\end{itemize}
+
+\subsubsection*{Question 16 (Avancé) : Comparaison LDAP et Active Directory}
+
+\reponse
+LDAP est un \textbf{protocole} d'accès à un annuaire. Active Directory
+(AD) est un \textbf{service d'annuaire complet} de Microsoft, qui
+utilise LDAP comme l'un de ses protocoles.
+
+\textbf{Similitudes :} structure hiérarchique, même modèle de nommage
+(DN, CN, OU, DC), recherche par requêtes LDAP, gestion des utilisateurs
+et des groupes.
+
+\begin{longtable}{|L{3.4cm}|L{5.6cm}|L{5.6cm}|}
+\hline
+\textbf{Critère} & \textbf{LDAP} & \textbf{Active Directory} \\ \hline
+\endhead
+Nature & Protocole ouvert (standard IETF) & Produit Microsoft
+(Windows Server) \\ \hline
+Implémentations & OpenLDAP, 389 Directory Server & AD DS \\ \hline
+Authentification & Bind LDAP (simple ou SASL) & Kerberos (par défaut),
+NTLM, LDAP \\ \hline
+Services intégrés & Annuaire seulement & DNS, Kerberos, GPO, PKI,
+réplication multi-maître \\ \hline
+Gestion des postes & Non & Oui (stratégies de groupe, jonction au
+domaine) \\ \hline
+Plateforme & Multiplateforme & Surtout Windows \\ \hline
+\end{longtable}
+
+\exemple
+Une entreprise sous Windows utilise AD pour gérer ses postes et ses
+utilisateurs. Un serveur web Linux peut tout de même authentifier ces
+utilisateurs en interrogeant AD via LDAP.
+
+\sources
+\begin{itemize}
+    \item Microsoft Learn, Active Directory Domain Services Overview,
+    \url{https://learn.microsoft.com/}.
+\end{itemize}
+
+\paragraph{B. RADIUS et TACACS+}
+
+\subsubsection*{Question 17 (Facile) : Signification de AAA}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Authentication (Authentification) :} vérifier
+    \textbf{qui} est l'utilisateur (identifiant et mot de passe,
+    certificat, jeton).
+    \item \textbf{Authorization (Autorisation) :} déterminer \textbf{ce
+    qu'il a le droit de faire} (VLAN attribué, niveau de privilège,
+    commandes permises).
+    \item \textbf{Accounting (Traçabilité) :} enregistrer \textbf{ce
+    qu'il a fait} (heure de connexion, durée, volume de données).
+\end{itemize}
+
+\exemple
+Un employé se connecte au Wi-Fi : RADIUS vérifie son identité,
+l'affecte au VLAN « Personnel », puis enregistre le début et la fin de
+sa session.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 2865 : RADIUS ; RFC 2866 : RADIUS Accounting,
+    \url{https://www.rfc-editor.org/rfc/rfc2865}.
+\end{itemize}
+
+\subsubsection*{Question 18 (Moyen) : Flux d'authentification RADIUS}
+
+\reponse
+Trois acteurs interviennent : l'\textbf{utilisateur}, le \textbf{NAS}
+(client RADIUS : switch, point d'accès, serveur VPN) et le
+\textbf{serveur RADIUS}. Les échanges utilisent UDP 1812
+(authentification) et 1813 (accounting).
+
+\begin{enumerate}
+    \item L'utilisateur fournit ses identifiants au NAS.
+    \item Le NAS envoie un \textbf{Access-Request} au serveur RADIUS. Le
+    mot de passe est chiffré avec un secret partagé entre le NAS et le
+    serveur.
+    \item Le serveur vérifie les identifiants (base locale, LDAP ou AD).
+    \item Il répond par :
+    \begin{itemize}
+        \item \textbf{Access-Accept} : accès autorisé, avec des
+        attributs (VLAN, ACL, durée de session) ;
+        \item \textbf{Access-Reject} : accès refusé ;
+        \item \textbf{Access-Challenge} : information supplémentaire
+        demandée (code OTP, échange EAP).
+    \end{itemize}
+    \item Le NAS applique la décision.
+    \item Le NAS envoie un \textbf{Accounting-Request (Start)}, puis
+    \textbf{(Stop)} à la déconnexion.
+\end{enumerate}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 2865 : Remote Authentication Dial In User Service
+    (RADIUS), \url{https://www.rfc-editor.org/rfc/rfc2865}.
+\end{itemize}
+
+\subsubsection*{Question 19 (Avancé) : RADIUS et TACACS+}
+
+\reponse
+\begin{longtable}{|L{3.4cm}|L{5.6cm}|L{5.6cm}|}
+\hline
+\textbf{Critère} & \textbf{RADIUS} & \textbf{TACACS+} \\ \hline
+\endhead
+Origine & Standard ouvert (IETF) & Développé par Cisco, publié en
+RFC 8907 \\ \hline
+Transport & UDP 1812/1813 & TCP 49 \\ \hline
+Chiffrement & Seul le mot de passe est chiffré & Tout le corps du
+paquet est chiffré \\ \hline
+Séparation AAA & Authentification et autorisation combinées &
+Authentification, autorisation et accounting séparés \\ \hline
+Autorisation des commandes & Limitée & Commande par commande \\ \hline
+Usage principal & Accès réseau des utilisateurs (Wi-Fi, 802.1X, VPN) &
+Administration des équipements réseau \\ \hline
+\end{longtable}
+
+\textbf{Quand choisir l'un ou l'autre :}
+\begin{itemize}
+    \item \textbf{RADIUS} pour l'accès des utilisateurs au réseau : il
+    est multi-constructeur et supporte 802.1X et EAP.
+    \item \textbf{TACACS+} pour l'accès des administrateurs aux routeurs
+    et switchs : chaque commande peut être autorisée et journalisée.
+\end{itemize}
+Les deux sont souvent utilisés ensemble dans une même entreprise.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 8907 : The TACACS+ Protocol,
+    \url{https://www.rfc-editor.org/rfc/rfc8907}.
+\end{itemize}
+
+\subsubsection*{Question 20 (Cas pratique) : Connexion SSH à un switch avec RADIUS}
+
+\reponse
+\begin{enumerate}
+    \item L'administrateur lance \texttt{ssh admin@10.0.0.2}.
+    \item Le switch établit la session SSH chiffrée et demande les
+    identifiants.
+    \item Le switch, configuré avec \texttt{aaa new-model} et un groupe
+    RADIUS, envoie un \textbf{Access-Request} au serveur RADIUS.
+    \item Le serveur vérifie l'utilisateur dans l'annuaire (AD/LDAP).
+    \item Il renvoie un \textbf{Access-Accept} contenant le niveau de
+    privilège (ex. \texttt{priv-lvl=15}) ou un \textbf{Access-Reject}.
+    \item Le switch ouvre la session avec ce niveau de privilège.
+    \item Un \textbf{Accounting-Start}, puis un \textbf{Accounting-Stop},
+    sont envoyés pour tracer la session.
+    \item Si le serveur RADIUS est injoignable, le switch peut utiliser
+    un compte local de secours (\texttt{local}).
+\end{enumerate}
+
+\exemple
+\begin{verbatim}
+aaa new-model
+radius server RAD1
+ address ipv4 10.0.0.10 auth-port 1812 acct-port 1813
+ key S3cret
+aaa authentication login default group radius local
+aaa authorization exec default group radius local
+line vty 0 4
+ transport input ssh
+\end{verbatim}
+
+\sources
+\begin{itemize}
+    \item Cisco, Configuring RADIUS, documentation IOS,
+    \url{https://www.cisco.com/}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 4 : Kerberos et SNMP}
+% --------------------------------------------------
+\membre{\dotfill}{21 à 27}
+
+\paragraph{C. Kerberos}
+
+\subsubsection*{Question 21 (Moyen) : Le principe du « ticket » dans Kerberos}
+
+\reponse
+Un \textbf{ticket} est un justificatif chiffré, délivré par un tiers de
+confiance (le KDC), qui prouve l'identité d'un utilisateur auprès d'un
+service. Il contient l'identité de l'utilisateur, une clé de session et
+une durée de validité (souvent 10 heures).
+
+Son rôle : l'utilisateur s'authentifie \textbf{une seule fois} avec son
+mot de passe, puis présente des tickets aux services. Le mot de passe
+ne circule jamais sur le réseau. C'est le principe du \textbf{Single
+Sign-On (SSO)}.
+
+\exemple
+Le matin, un employé ouvre sa session Windows. Il accède ensuite aux
+partages de fichiers, à l'intranet et à l'imprimante sans retaper son
+mot de passe : ses tickets Kerberos sont présentés automatiquement.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4120 : The Kerberos Network Authentication Service
+    (V5), \url{https://www.rfc-editor.org/rfc/rfc4120}.
+\end{itemize}
+
+\subsubsection*{Question 22 (Avancé) : KDC, TGT et TGS}
+
+\reponse
+\begin{itemize}
+    \item \textbf{KDC (Key Distribution Center) :} serveur central de
+    confiance, qui connaît les clés secrètes de tous les utilisateurs et
+    services. Il comprend l'\textbf{AS} (Authentication Service) et le
+    \textbf{TGS}. Dans Windows, c'est le contrôleur de domaine.
+    \item \textbf{TGT (Ticket Granting Ticket) :} ticket délivré par
+    l'AS après l'authentification initiale. Il sert à demander d'autres
+    tickets sans redonner son mot de passe.
+    \item \textbf{TGS (Ticket Granting Service) :} service du KDC qui
+    délivre les \textbf{tickets de service} en échange du TGT.
+\end{itemize}
+
+\textbf{Interaction (port 88) :}
+\begin{enumerate}
+    \item \textbf{AS-REQ / AS-REP :} le client s'authentifie auprès de
+    l'AS et reçoit un TGT et une clé de session.
+    \item \textbf{TGS-REQ / TGS-REP :} le client présente le TGT au TGS
+    et reçoit un ticket pour le service voulu.
+    \item \textbf{AP-REQ / AP-REP :} le client présente ce ticket au
+    serveur d'application, qui le déchiffre avec sa propre clé et
+    accorde l'accès.
+\end{enumerate}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4120, \url{https://www.rfc-editor.org/rfc/rfc4120}.
+\end{itemize}
+
+\subsubsection*{Question 23 (Réflexion) : Pourquoi Kerberos est-il plus sécurisé qu'un mot de passe simple ?}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Le mot de passe ne circule jamais} sur le réseau, ni
+    en clair ni chiffré. Il sert seulement à dériver une clé locale.
+    \item \textbf{Authentification mutuelle :} le client peut vérifier
+    l'identité du serveur, ce qui limite les faux serveurs.
+    \item \textbf{Tickets limités dans le temps :} un ticket volé expire
+    rapidement.
+    \item \textbf{Protection contre le rejeu :} les authentificateurs
+    contiennent un horodatage, d'où la tolérance d'horloge de
+    5~minutes par défaut (et l'importance de NTP).
+    \item \textbf{SSO :} moins de saisies de mot de passe, donc moins
+    d'exposition.
+\end{itemize}
+
+\textbf{Limites :} le KDC est un point critique, et des attaques
+existent (Pass-the-Ticket, Golden Ticket, Kerberoasting).
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4120, \url{https://www.rfc-editor.org/rfc/rfc4120}.
+\end{itemize}
+
+\paragraph{A. SNMP (Simple Network Management Protocol)}
+
+\subsubsection*{Question 24 (Facile) : Les trois composants d'une architecture SNMP}
+
+\reponse
+\begin{enumerate}
+    \item \textbf{Le manager (NMS, Network Management Station) :} poste
+    de supervision qui interroge les équipements et reçoit les alertes
+    (Zabbix, LibreNMS, PRTG).
+    \item \textbf{L'agent SNMP :} logiciel présent sur chaque équipement
+    supervisé (routeur, switch, serveur), qui répond aux requêtes et
+    envoie des alertes.
+    \item \textbf{La MIB :} base d'informations qui décrit les objets
+    consultables sur l'agent.
+\end{enumerate}
+Ports utilisés : UDP 161 (requêtes vers l'agent), UDP 162 (traps vers
+le manager).
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 3411 : An Architecture for Describing SNMP
+    Management Frameworks, \url{https://www.rfc-editor.org/rfc/rfc3411}.
+\end{itemize}
+
+\subsubsection*{Question 25 (Moyen) : SNMPv1, SNMPv2c et SNMPv3}
+
+\reponse
+\begin{longtable}{|L{2.4cm}|L{6cm}|L{6.2cm}|}
+\hline
+\textbf{Version} & \textbf{Caractéristiques} & \textbf{Sécurité} \\ \hline
+\endhead
+SNMPv1 & Première version. Opérations GET, GETNEXT, SET, TRAP. Compteurs
+32 bits. & Chaîne de communauté envoyée \textbf{en clair}. \\ \hline
+SNMPv2c & Ajoute \textbf{GETBULK} (lecture en masse), \textbf{INFORM}
+(trap acquitté), compteurs 64 bits, meilleurs messages d'erreur. &
+Toujours la communauté en clair. \\ \hline
+SNMPv3 & Même fonctionnalités que v2c, avec un vrai modèle de sécurité
+(USM et VACM). & \textbf{Authentification} (SHA), \textbf{chiffrement}
+(AES), contrôle d'accès par vue. \\ \hline
+\end{longtable}
+
+\textbf{Pourquoi SNMPv3 est recommandé :} avec v1 et v2c, un attaquant
+qui capture le trafic récupère la communauté et peut lire, voire
+modifier (SET), la configuration des équipements. SNMPv3 garantit
+l'authentification, l'intégrité et la confidentialité, avec trois
+niveaux : \textit{noAuthNoPriv}, \textit{authNoPriv} et
+\textit{authPriv} (recommandé).
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 3414 : User-based Security Model (USM) for SNMPv3,
+    \url{https://www.rfc-editor.org/rfc/rfc3414}.
+\end{itemize}
+
+\subsubsection*{Question 26 (Pratique) : Qu'est-ce qu'une MIB ?}
+
+\reponse
+La \textbf{MIB (Management Information Base)} est une base de données
+hiérarchique qui décrit tous les objets qu'un agent SNMP peut exposer.
+Chaque objet est identifié par un \textbf{OID} (Object Identifier),
+une suite de nombres qui représente son chemin dans l'arbre (ex.
+\texttt{1.3.6.1.2.1.1.1}). Il existe des MIB standards (MIB-II) et des
+MIB propriétaires des constructeurs.
+
+\exemple
+\begin{longtable}{|L{4cm}|L{4.6cm}|L{6cm}|}
+\hline
+\textbf{Objet} & \textbf{OID} & \textbf{Information} \\ \hline
+sysDescr & 1.3.6.1.2.1.1.1 & Description de l'équipement (modèle,
+version) \\ \hline
+sysUpTime & 1.3.6.1.2.1.1.3 & Temps écoulé depuis le démarrage \\ \hline
+sysName & 1.3.6.1.2.1.1.5 & Nom de l'équipement \\ \hline
+ifOperStatus & 1.3.6.1.2.1.2.2.1.8 & État d'une interface (up/down) \\ \hline
+ifInOctets & 1.3.6.1.2.1.2.2.1.10 & Octets reçus sur une interface \\ \hline
+\end{longtable}
+On y trouve aussi l'utilisation CPU et mémoire, la température, l'état
+des ventilateurs et les tables de routage.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 1213 : MIB-II,
+    \url{https://www.rfc-editor.org/rfc/rfc1213}.
+\end{itemize}
+
+\subsubsection*{Question 27 (Avancé) : Opérations GET, SET et TRAP}
+
+\reponse
+\begin{longtable}{|L{1.8cm}|L{3.2cm}|L{4.8cm}|L{4.8cm}|}
+\hline
+\textbf{Opération} & \textbf{Sens} & \textbf{Rôle} & \textbf{Contexte} \\ \hline
+\endhead
+GET & Manager \fl{} agent & Lire la valeur d'un objet & Supervision
+périodique (polling) : débit, CPU, état des interfaces \\ \hline
+SET & Manager \fl{} agent & Modifier la valeur d'un objet & Action à
+distance : désactiver un port, changer un paramètre \\ \hline
+TRAP & Agent \fl{} manager & Notification spontanée, sans accusé de
+réception & Alerte immédiate : lien coupé, redémarrage, seuil dépassé
+\\ \hline
+\end{longtable}
+
+GET fonctionne en mode « pull » (le manager demande), TRAP en mode
+« push » (l'agent prévient). Les deux sont complémentaires. En SNMPv2c
+et v3, l'\textbf{INFORM} est un trap avec accusé de réception.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 3416 : Protocol Operations for SNMP,
+    \url{https://www.rfc-editor.org/rfc/rfc3416}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 5 : Syslog et NetFlow}
+% --------------------------------------------------
+\membre{\dotfill}{28 à 33}
+
+\paragraph{B. Syslog}
+
+\subsubsection*{Question 28 (Facile) : Objectif d'un serveur Syslog centralisé}
+
+\reponse
+Un serveur Syslog centralisé \textbf{collecte en un seul endroit les
+journaux (logs)} de tous les équipements : routeurs, switchs, pare-feu,
+serveurs. Les messages sont envoyés en UDP 514 (ou TCP, et TLS sur le
+port 6514 pour la sécurité).
+
+Il permet de conserver les logs même si un équipement redémarre ou est
+compromis, de les consulter depuis une seule interface et de les
+transmettre à un SIEM.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 5424 : The Syslog Protocol,
+    \url{https://www.rfc-editor.org/rfc/rfc5424}.
+\end{itemize}
+
+\subsubsection*{Question 29 (Moyen) : Les niveaux de sévérité Syslog (0 à 7)}
+
+\reponse
+Plus le chiffre est bas, plus le message est grave.
+
+\begin{longtable}{|L{0.9cm}|L{3cm}|L{10.6cm}|}
+\hline
+\textbf{N°} & \textbf{Niveau} & \textbf{Exemple} \\ \hline
+\endhead
+0 & Emergency & Le système est inutilisable (panne totale, kernel
+panic). \\ \hline
+1 & Alert & Action immédiate requise (base de données corrompue,
+surchauffe). \\ \hline
+2 & Critical & Condition critique (défaillance d'un disque ou d'une
+alimentation). \\ \hline
+3 & Error & Erreur (interface en échec, échec d'un service). \\ \hline
+4 & Warning & Avertissement (CPU à 85~\%, espace disque faible). \\ \hline
+5 & Notice & Événement normal mais important (interface qui passe up
+ou down, changement de configuration). \\ \hline
+6 & Informational & Information (utilisateur connecté, ACL appliquée).
+\\ \hline
+7 & Debug & Messages de débogage (détails d'un protocole). \\ \hline
+\end{longtable}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 5424, \url{https://www.rfc-editor.org/rfc/rfc5424}.
+\end{itemize}
+
+\subsubsection*{Question 30 (Pratique) : Pourquoi centraliser les logs ?}
+
+\reponse
+\textbf{En sécurité :}
+\begin{itemize}
+    \item un attaquant qui compromet un équipement ne peut pas effacer
+    les logs déjà envoyés au serveur central ;
+    \item la \textbf{corrélation} d'événements entre plusieurs
+    équipements permet de détecter une attaque (force brute, scan,
+    mouvement latéral) ;
+    \item conservation pour l'\textbf{audit}, l'investigation
+    \textit{forensic} et la conformité réglementaire.
+\end{itemize}
+
+\textbf{En dépannage :}
+\begin{itemize}
+    \item vue unique au lieu de se connecter à chaque équipement ;
+    \item reconstitution de la chronologie d'un incident (à condition
+    que les horloges soient synchronisées avec NTP) ;
+    \item recherche, filtrage et alertes automatiques.
+\end{itemize}
+
+\exemple
+Dix tentatives SSH échouées sur plusieurs switchs en une minute, depuis
+la même IP : le SIEM qui reçoit les logs centralisés détecte une
+attaque par force brute et déclenche une alerte.
+
+\sources
+\begin{itemize}
+    \item NIST, SP 800-92 : Guide to Computer Security Log Management,
+    \url{https://csrc.nist.gov/}.
+\end{itemize}
+
+\paragraph{C. NetFlow}
+
+\textit{Remarque : vérifier dans le sujet original le libellé
+exact de la question 31, dont le texte est incomplet dans
+la version fournie.}
+
+\subsubsection*{Question 31 : NetFlow et informations collectées sur le trafic réseau}
+
+\reponse
+NetFlow est une technologie (créée par Cisco, standardisée ensuite sous
+le nom \textbf{IPFIX}) qui permet aux routeurs et switchs d'exporter
+des \textbf{statistiques sur les flux} qui les traversent vers un
+\textbf{collecteur}. Un flux est un ensemble de paquets qui partagent
+les mêmes caractéristiques.
+
+Il ne capture pas le contenu des paquets, mais les
+\textbf{métadonnées} : adresses IP et ports source et destination,
+protocole, nombre de paquets et d'octets, heures de début et de fin,
+interfaces d'entrée et de sortie, flags TCP, ToS/DSCP, numéros d'AS.
+Il répond aux questions « qui parle à qui, avec quel protocole, et
+combien ? ».
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 3954 : Cisco Systems NetFlow Services Export
+    Version 9 ; RFC 7011 : IPFIX,
+    \url{https://www.rfc-editor.org/rfc/rfc7011}.
+\end{itemize}
+
+\subsubsection*{Question 32 (Avancé) : Les 7 champs clés d'un flow NetFlow}
+
+\reponse
+Un flux est identifié par 7 champs. Deux paquets appartiennent au même
+flux si ces 7 valeurs sont identiques :
+\begin{enumerate}
+    \item Adresse IP source ;
+    \item Adresse IP destination ;
+    \item Port source ;
+    \item Port destination ;
+    \item Protocole de couche 3 (TCP, UDP, ICMP) ;
+    \item Octet ToS (Type of Service / DSCP) ;
+    \item Interface d'entrée (ifIndex).
+\end{enumerate}
+
+\sources
+\begin{itemize}
+    \item Cisco, Introduction to Cisco IOS NetFlow,
+    \url{https://www.cisco.com/}.
+\end{itemize}
+
+\subsubsection*{Question 33 (Cas pratique) : Utilisation de NetFlow}
+
+\reponse
+\textbf{Détecter une attaque DDoS :}
+\begin{itemize}
+    \item hausse brutale du nombre de flux ou de paquets vers une même
+    IP de destination ;
+    \item très grand nombre d'IP sources différentes vers une seule
+    cible ;
+    \item flux de petits paquets (SYN flood) ou trafic UDP massif vers
+    des ports d'amplification (53, 123, 1900) ;
+    \item alerte sur seuil, puis mitigation (RTBH, filtrage).
+\end{itemize}
+
+\textbf{Identifier les applications qui consomment le plus de bande
+passante :}
+\begin{itemize}
+    \item classement « Top N » par octets, selon les ports et protocoles
+    (443, 1935, etc.) ou par IP/utilisateur ;
+    \item suivi historique pour la planification de capacité et le
+    réglage de la QoS.
+\end{itemize}
+
+\textbf{Analyser les patterns de trafic anormaux :}
+\begin{itemize}
+    \item établir une \textbf{référence (baseline)} du trafic normal,
+    puis détecter les écarts ;
+    \item scan de ports (une IP vers beaucoup de ports), communications
+    vers des pays ou IP suspectes, exfiltration (gros volumes sortants la
+    nuit), trafic sur des ports inhabituels.
+\end{itemize}
+
+\exemple
+Outils : ntopng, Elastiflow, SolarWinds NTA, ou un SIEM qui reçoit les
+flux IPFIX.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 7011, \url{https://www.rfc-editor.org/rfc/rfc7011}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 6 : HTTP/HTTPS et serveurs Web}
+% --------------------------------------------------
+\membre{\dotfill}{42 à 45}
+
+\paragraph{A. HTTP/HTTPS et serveurs Web}
+
+\subsubsection*{Question 42 (Facile) : Différence entre HTTP et HTTPS}
+
+\reponse
+\begin{itemize}
+    \item \textbf{HTTP} (port 80) transmet les données \textbf{en clair}
+    : un attaquant sur le chemin peut lire et modifier les échanges.
+    \item \textbf{HTTPS} (port 443) est HTTP encapsulé dans
+    \textbf{TLS}. Il apporte la \textbf{confidentialité} (chiffrement),
+    l'\textbf{intégrité} (données non modifiées) et
+    l'\textbf{authentification} du serveur (certificat).
+\end{itemize}
+
+\textbf{Pourquoi HTTPS est devenu la norme :}
+\begin{itemize}
+    \item protection des mots de passe, paiements et données
+    personnelles ;
+    \item les navigateurs affichent « Non sécurisé » pour les sites HTTP
+    et les moteurs de recherche favorisent HTTPS ;
+    \item certificats gratuits et automatisés (Let's Encrypt) ;
+    \item HTTP/2 et HTTP/3 ne sont utilisés par les navigateurs qu'avec
+    TLS ;
+    \item exigences réglementaires (protection des données, PCI DSS).
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 9110 : HTTP Semantics,
+    \url{https://www.rfc-editor.org/rfc/rfc9110}.
+\end{itemize}
+
+\subsubsection*{Question 43 (Moyen) : Les méthodes HTTP principales}
+
+\reponse
+\begin{longtable}{|L{1.8cm}|L{6cm}|L{2.4cm}|L{4.4cm}|}
+\hline
+\textbf{Méthode} & \textbf{Rôle} & \textbf{Idempotente} &
+\textbf{Exemple} \\ \hline
+\endhead
+GET & Lire une ressource, sans la modifier & Oui &
+\texttt{GET /etudiants/12} \\ \hline
+POST & Créer une ressource ou envoyer des données à traiter & Non &
+\texttt{POST /etudiants} \\ \hline
+PUT & Remplacer entièrement une ressource & Oui &
+\texttt{PUT /etudiants/12} \\ \hline
+PATCH & Modifier partiellement une ressource & Pas forcément &
+\texttt{PATCH /etudiants/12} (e-mail seul) \\ \hline
+DELETE & Supprimer une ressource & Oui & \texttt{DELETE /etudiants/12}
+\\ \hline
+\end{longtable}
+Une méthode \textbf{idempotente} donne le même résultat si on la répète
+plusieurs fois.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 9110 ; RFC 5789 : PATCH Method for HTTP,
+    \url{https://www.rfc-editor.org/rfc/rfc5789}.
+\end{itemize}
+
+\subsubsection*{Question 44 (Avancé) : HTTP/2 et HTTP/3}
+
+\reponse
+HTTP/1.1 envoie une requête à la fois par connexion TCP, avec des
+en-têtes texte répétés. Il souffre du \textbf{blocage en tête de file}
+(\textit{head-of-line blocking}), et les navigateurs ouvrent plusieurs
+connexions pour compenser.
+
+\begin{itemize}
+    \item \textbf{Multiplexage (HTTP/2) :} plusieurs requêtes et
+    réponses circulent en parallèle sur \textbf{une seule connexion},
+    sous forme de flux (\textit{streams}) découpés en trames binaires.
+    \item \textbf{Server Push (HTTP/2) :} le serveur envoie des
+    ressources avant qu'elles soient demandées (CSS, JS). En pratique,
+    il a été abandonné par les principaux navigateurs, au profit des
+    \textit{preload hints} (réponse 103 Early Hints).
+    \item \textbf{Compression des en-têtes :} \textbf{HPACK} en HTTP/2,
+    \textbf{QPACK} en HTTP/3. Les en-têtes répétés ne sont envoyés
+    qu'une fois.
+    \item \textbf{QUIC (HTTP/3) :} HTTP/3 remplace TCP par QUIC, sur
+    UDP. QUIC intègre TLS 1.3, établit la connexion plus vite (1-RTT,
+    voire 0-RTT), supprime le blocage en tête de file au niveau
+    transport (la perte d'un paquet ne bloque qu'un seul flux) et permet
+    la \textbf{migration de connexion} (passage du Wi-Fi à la 4G sans
+    coupure).
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 9113 : HTTP/2 ; RFC 9114 : HTTP/3 ; RFC 9000 :
+    QUIC, \url{https://www.rfc-editor.org/rfc/rfc9114}.
+\end{itemize}
+
+\subsubsection*{Question 45 (Pratique) : Les codes de statut HTTP}
+
+\reponse
+\begin{longtable}{|L{4.4cm}|L{10.2cm}|}
+\hline
+\textbf{Code} & \textbf{Contexte} \\ \hline
+\endhead
+200 OK & Requête réussie, la ressource est renvoyée. \\ \hline
+301 Moved Permanently & La ressource a changé définitivement d'adresse
+(ex. redirection de HTTP vers HTTPS). \\ \hline
+304 Not Modified & La ressource n'a pas changé depuis la version en
+cache du client : rien n'est renvoyé. \\ \hline
+401 Unauthorized & Authentification requise ou identifiants invalides.
+\\ \hline
+403 Forbidden & Le client est identifié, mais n'a pas le droit
+d'accéder à la ressource. \\ \hline
+404 Not Found & La ressource n'existe pas. \\ \hline
+500 Internal Server Error & Erreur dans l'application côté serveur (bug,
+exception). \\ \hline
+502 Bad Gateway & Un reverse proxy ou une passerelle a reçu une réponse
+invalide du serveur en amont (serveur d'application arrêté). \\ \hline
+503 Service Unavailable & Serveur surchargé ou en maintenance,
+indisponibilité temporaire. \\ \hline
+\end{longtable}
+Familles : 2xx succès, 3xx redirection, 4xx erreur du client, 5xx
+erreur du serveur.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 9110, section 15,
+    \url{https://www.rfc-editor.org/rfc/rfc9110}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 7 : Proxy, reverse proxy et CDN}
+% --------------------------------------------------
+\membre{\dotfill}{46 à 51}
+
+\paragraph{B. Proxy et Reverse Proxy}
+
+\subsubsection*{Question 46 (Moyen) : Forward proxy et reverse proxy}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Forward proxy :} placé \textbf{devant les clients}. Il
+    reçoit leurs requêtes et les transmet à Internet en leur nom. Il
+    représente les clients.
+
+    \textit{Exemples :} filtrage web en entreprise (Squid), contrôle
+    d'accès, journalisation, cache, contournement de restrictions.
+
+    \item \textbf{Reverse proxy :} placé \textbf{devant les serveurs}.
+    Il reçoit les requêtes d'Internet et les transmet aux serveurs
+    internes. Il représente les serveurs.
+
+    \textit{Exemples :} Nginx, HAProxy ou Traefik devant des serveurs
+    web : terminaison TLS, répartition de charge, cache, WAF.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item Nginx, documentation Reverse Proxy,
+    \url{https://docs.nginx.com/}.
+\end{itemize}
+
+\subsubsection*{Question 47 (Pratique) : Avantages d'un reverse proxy}
+
+\reponse
+\begin{enumerate}
+    \item \textbf{Répartition de charge} entre plusieurs serveurs.
+    \item \textbf{Terminaison TLS} centralisée : un seul endroit pour
+    gérer les certificats, et moins de charge sur les serveurs.
+    \item \textbf{Cache} des contenus fréquents.
+    \item \textbf{Compression} (gzip, Brotli) des réponses.
+    \item \textbf{Masquage} de l'architecture interne : les clients ne
+    voient jamais l'adresse réelle des serveurs.
+    \item \textbf{Sécurité} : WAF, limitation de débit, filtrage.
+    \item \textbf{Haute disponibilité} : health checks et bascule.
+    \item \textbf{Routage} selon l'URL ou le nom de domaine vers
+    différentes applications.
+\end{enumerate}
+
+\sources
+\begin{itemize}
+    \item HAProxy Technologies, documentation,
+    \url{https://www.haproxy.com/documentation/}.
+\end{itemize}
+
+\subsubsection*{Question 48 (Avancé) : Sécurité, performances et disponibilité}
+
+\reponse
+\textbf{Sécurité :}
+\begin{itemize}
+    \item il cache les IP et la technologie des serveurs (suppression de
+    l'en-tête \texttt{Server}) ;
+    \item WAF (ModSecurity) contre les injections SQL et le XSS ;
+    \item limitation de débit (\textit{rate limiting}) contre la force
+    brute et les petites attaques DDoS ;
+    \item TLS imposé partout et redirection HTTP \fl{} HTTPS ;
+    \item filtrage par IP, en-têtes ou pays.
+\end{itemize}
+
+\textbf{Performances :}
+\begin{itemize}
+    \item cache des réponses (images, pages), qui n'atteignent plus les
+    serveurs ;
+    \item compression gzip ou Brotli ;
+    \item réutilisation des connexions (\textit{keep-alive}) vers les
+    serveurs ;
+    \item HTTP/2 et HTTP/3 côté clients, même si les serveurs ne les
+    supportent pas.
+\end{itemize}
+
+\textbf{Disponibilité :}
+\begin{itemize}
+    \item load balancing entre plusieurs serveurs ;
+    \item health checks : un serveur en panne est retiré automatiquement ;
+    \item failover vers un serveur de secours ;
+    \item maintenance sans coupure (retrait progressif d'un serveur).
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item OWASP, ModSecurity Core Rule Set, \url{https://owasp.org/}.
+\end{itemize}
+
+\paragraph{C. CDN (Content Delivery Network)}
+
+\subsubsection*{Question 49 (Facile) : Qu'est-ce qu'un CDN ?}
+
+\reponse
+Un CDN est un \textbf{réseau de serveurs de cache} (\textit{edge
+servers}) répartis dans le monde. Il stocke une copie des contenus
+d'un site au plus près des utilisateurs.
+
+\textbf{Principe :}
+\begin{enumerate}
+    \item l'utilisateur demande une ressource ;
+    \item le DNS ou l'Anycast le dirige vers le serveur edge le plus
+    proche ;
+    \item si la ressource est en cache (\textit{cache hit}), elle est
+    servie directement ;
+    \item sinon (\textit{cache miss}), l'edge la récupère sur le serveur
+    d'origine, la sert et la garde en cache.
+\end{enumerate}
+Résultat : latence réduite, moins de charge sur l'origine, absorption
+des pics de trafic et d'une partie des attaques DDoS.
+
+\exemple
+Cloudflare, Akamai, Amazon CloudFront.
+
+\sources
+\begin{itemize}
+    \item Cloudflare Learning Center, What is a CDN?,
+    \url{https://www.cloudflare.com/learning/}.
+\end{itemize}
+
+\subsubsection*{Question 50 (Moyen) : Contenus qui bénéficient le plus d'un CDN}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Contenu statique} (images, CSS, JavaScript, polices) :
+    identique pour tous les utilisateurs et rarement modifié, donc
+    facile à mettre en cache longtemps.
+    \item \textbf{Vidéo et streaming} (HLS, DASH) : gros volumes, très
+    sensibles à la latence et au débit.
+    \item \textbf{Téléchargements de fichiers} (mises à jour logicielles,
+    jeux, ISO) : volume énorme et demandes simultanées.
+    \item \textbf{Pages web peu changeantes} (blogs, documentation).
+\end{itemize}
+Les contenus \textbf{dynamiques et personnalisés} (panier, compte
+utilisateur) en profitent moins pour le cache, mais gagnent quand même
+en accélération réseau et en protection DDoS.
+
+\sources
+\begin{itemize}
+    \item Akamai, What Is a CDN?, \url{https://www.akamai.com/}.
+\end{itemize}
+
+\subsubsection*{Question 51 (Avancé) : Stratégies de cache dans un CDN}
+
+\reponse
+\begin{itemize}
+    \item \textbf{En-têtes Cache-Control :} le serveur d'origine indique
+    comment cacher. \texttt{max-age} (durée côté navigateur),
+    \texttt{s-maxage} (durée côté CDN), \texttt{public} ou
+    \texttt{private}, \texttt{no-store} (ne jamais cacher),
+    \texttt{no-cache} (revalider à chaque fois).
+    \item \textbf{TTL (Time To Live) :} durée pendant laquelle une copie
+    reste valide. Long pour le statique (un an avec des noms de fichiers
+    versionnés), court ou nul pour le dynamique. À expiration, l'edge
+    revalide avec \texttt{ETag} ou \texttt{Last-Modified} (réponse 304
+    si rien n'a changé).
+    \item \textbf{Edge caching et Origin shield :} l'edge cache est au
+    plus près des utilisateurs. L'\textbf{origin shield} est une couche
+    de cache intermédiaire entre les edges et l'origine : tous les cache
+    miss passent par lui, ce qui protège l'origine d'un trop grand
+    nombre de requêtes.
+    \item \textbf{Invalidation de cache :} supprimer une copie avant la
+    fin de son TTL, par \textbf{purge} (par URL, par tag ou complète) ou
+    par \textbf{versionnement} des fichiers (\texttt{style.v2.css}), qui
+    est la méthode la plus fiable.
+\end{itemize}
+
+\exemple
+\texttt{Cache-Control: public, max-age=31536000, immutable} pour
+\texttt{app.3f2a1.js}, et \texttt{Cache-Control: no-store} pour la page
+de profil d'un utilisateur.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 9111 : HTTP Caching,
+    \url{https://www.rfc-editor.org/rfc/rfc9111}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 8 : Load balancing et DNS Web}
+% --------------------------------------------------
+\membre{\dotfill}{52 à 57}
+
+\paragraph{D. Load Balancing Web}
+
+\subsubsection*{Question 52 (Moyen) : Algorithmes de répartition de charge}
+
+\reponse
+\begin{longtable}{|L{3cm}|L{5.8cm}|L{5.8cm}|}
+\hline
+\textbf{Algorithme} & \textbf{Principe} & \textbf{Scénario adapté} \\ \hline
+\endhead
+Round Robin & Les requêtes sont distribuées à tour de rôle. & Serveurs
+identiques, requêtes de durée similaire. \\ \hline
+Least Connections & La requête va au serveur qui a le moins de
+connexions actives. & Requêtes de durée variable (sessions longues,
+WebSocket, base de données). \\ \hline
+IP Hash & L'IP du client détermine toujours le même serveur. & Besoin
+de persistance de session sans cookie. \\ \hline
+Weighted Round Robin & Tour de rôle pondéré selon la capacité de chaque
+serveur. & Serveurs de puissances différentes (un serveur deux fois
+plus puissant reçoit deux fois plus de requêtes). \\ \hline
+\end{longtable}
+
+\sources
+\begin{itemize}
+    \item Nginx, HTTP Load Balancing, \url{https://docs.nginx.com/}.
+\end{itemize}
+
+\subsubsection*{Question 53 (Avancé) : Load balancing de couche 4 et de couche 7}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Couche 4 (Transport) :} décide uniquement à partir des
+    IP, des ports et du protocole (TCP/UDP). Il ne lit pas le contenu.
+    Il est très rapide et peu gourmand, et fonctionne pour tout
+    protocole.
+
+    \textit{Décisions possibles :} tout le trafic TCP 443 vers le pool
+    A, le trafic UDP 53 vers le pool DNS, répartition par IP source.
+
+    \item \textbf{Couche 7 (Application) :} lit le contenu HTTP (URL,
+    en-têtes, cookies, nom d'hôte). Il est plus intelligent mais plus
+    coûteux, et doit déchiffrer TLS.
+
+    \textit{Décisions possibles :} \texttt{/api/*} vers les serveurs
+    d'API, \texttt{/images/*} vers les serveurs statiques,
+    \texttt{shop.exemple.dz} vers l'application boutique, utilisateurs
+    mobiles (User-Agent) vers une version dédiée, persistance par
+    cookie, tests A/B.
+\end{itemize}
+
+\exemple
+Couche 4 : AWS Network Load Balancer, LVS. Couche 7 : HAProxy en mode
+HTTP, Nginx, AWS Application Load Balancer.
+
+\sources
+\begin{itemize}
+    \item HAProxy, Layer 4 vs Layer 7 Load Balancing,
+    \url{https://www.haproxy.com/}.
+\end{itemize}
+
+\subsubsection*{Question 54 (Pratique) : Architecture web complète}
+
+\reponse
+\begin{center}
+\small
+Utilisateurs \fl{} DNS (GeoDNS) \fl{} \textbf{CDN} \fl{} \textbf{WAF +
+Reverse proxy / LB couche 7} (en paire HA)\\
+\fl{} \textbf{Pool API} / \textbf{Pool statique} / \textbf{Serveurs de
+streaming}\\
+\fl{} \textbf{Cache Redis} \fl{} \textbf{Base de données} (primaire +
+réplique)
+\end{center}
+
+\textbf{Justification de chaque choix :}
+\begin{itemize}
+    \item \textbf{CDN :} sert les pages statiques et les segments vidéo
+    au plus près des utilisateurs, absorbe les pics et les DDoS.
+    \item \textbf{Reverse proxy / load balancer couche 7} (HAProxy ou
+    Nginx, en paire active/passive avec VRRP) : terminaison TLS, WAF,
+    routage par URL (\texttt{/api} \fl{} pool API, \texttt{/video} \fl{}
+    streaming), health checks.
+    \item \textbf{Serveurs d'application de l'API REST :} plusieurs
+    instances sans état (stateless), ajoutées selon la charge, avec
+    l'algorithme least connections.
+    \item \textbf{Streaming vidéo :} serveurs dédiés (HLS/DASH) ou
+    stockage objet derrière le CDN, car le trafic est très volumineux.
+    \item \textbf{Cache (Redis ou Memcached) :} stocke les résultats
+    fréquents de l'API et les sessions, ce qui soulage la base.
+    \item \textbf{Base de données :} un serveur primaire pour les
+    écritures et des répliques en lecture, avec sauvegardes, dans un
+    réseau privé non exposé.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item AWS, Well-Architected Framework,
+    \url{https://aws.amazon.com/architecture/well-architected/}.
+\end{itemize}
+
+\paragraph{E. DNS pour les Services Web}
+
+\subsubsection*{Question 55 (Moyen) : DNS Round Robin et ses limites}
+
+\reponse
+Le \textbf{DNS Round Robin} consiste à associer \textbf{plusieurs
+enregistrements A} au même nom. Le serveur DNS renvoie les adresses
+dans un ordre qui change à chaque réponse, ce qui répartit les clients
+entre les serveurs.
+
+\textbf{Limites :}
+\begin{itemize}
+    \item \textbf{pas de vérification de santé} : une IP en panne
+    continue d'être distribuée ;
+    \item \textbf{cache DNS} des résolveurs et des clients : la
+    répartition est inégale et les changements sont lents ;
+    \item pas de prise en compte de la charge ni de la capacité des
+    serveurs ;
+    \item pas de persistance de session ;
+    \item le client garde l'IP reçue, même si elle devient lente.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 1794 : DNS Support for Load Balancing,
+    \url{https://www.rfc-editor.org/rfc/rfc1794}.
+\end{itemize}
+
+\subsubsection*{Question 56 (Avancé) : GeoDNS, DNS Failover, DNS Load Balancing et Anycast}
+
+\reponse
+\begin{itemize}
+    \item \textbf{GeoDNS :} le DNS répond avec une IP différente selon la
+    localisation du client. Il dirige l'utilisateur vers le datacenter
+    le plus proche (latence, conformité légale).
+    \item \textbf{DNS Failover :} des sondes surveillent les serveurs.
+    En cas de panne, le DNS retire l'IP défaillante et renvoie celle du
+    site de secours. Un TTL court (30 à 60 s) accélère la bascule.
+    \item \textbf{DNS Load Balancing :} évolution du Round Robin avec
+    health checks, pondération et prise en compte de la latence
+    (Route 53, Cloudflare Load Balancing).
+    \item \textbf{Anycast :} la même IP est annoncée en BGP depuis
+    plusieurs sites. Le routage Internet envoie chaque client vers le
+    site le plus proche. Il est utilisé par les serveurs DNS racine et
+    les CDN, et résiste bien aux DDoS.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4786 : Operation of Anycast Services,
+    \url{https://www.rfc-editor.org/rfc/rfc4786}.
+\end{itemize}
+
+\subsubsection*{Question 57 (Pratique) : Haute disponibilité DNS avec plusieurs datacenters}
+
+\reponse
+\begin{enumerate}
+    \item \textbf{DNS autoritaire redondant :} au moins deux
+    fournisseurs DNS ou un service Anycast, avec des serveurs de noms
+    dans plusieurs régions.
+    \item \textbf{GeoDNS :} chaque région est dirigée vers son
+    datacenter le plus proche (Europe \fl{} DC Paris, Afrique \fl{} DC
+    Alger).
+    \item \textbf{Health checks} (HTTP, TCP) sur chaque datacenter, avec
+    \textbf{DNS Failover} automatique vers un autre site si l'un tombe.
+    \item \textbf{TTL court} (60 s) sur les enregistrements concernés,
+    pour une bascule rapide.
+    \item \textbf{Pondération} pour répartir la charge ou faire une
+    migration progressive.
+    \item \textbf{DNSSEC} pour protéger les réponses.
+    \item Dans chaque datacenter, des load balancers locaux redondants,
+    et des données répliquées entre les sites.
+\end{enumerate}
+
+\exemple
+Avec AWS Route 53 : politique de routage par géolocalisation, combinée
+à une politique de basculement et à des health checks sur chaque
+région.
+
+\sources
+\begin{itemize}
+    \item AWS, Amazon Route 53 Developer Guide,
+    \url{https://docs.aws.amazon.com/route53/}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 9 : API REST, microservices et WebSocket}
+% --------------------------------------------------
+\membre{\dotfill}{58 à 62}
+
+\paragraph{F. API REST et Microservices}
+
+\subsubsection*{Question 58 (Facile) : Qu'est-ce qu'une API REST ?}
+
+\reponse
+Une API REST est une interface qui permet à des applications de
+communiquer via HTTP, en manipulant des \textbf{ressources} identifiées
+par des URI (\texttt{/etudiants/12}), le plus souvent en JSON.
+
+\textbf{Principes fondamentaux (Roy Fielding, 2000) :}
+\begin{enumerate}
+    \item \textbf{Client-serveur :} séparation entre l'interface et le
+    stockage des données.
+    \item \textbf{Sans état (stateless) :} chaque requête contient tout
+    ce qu'il faut pour être traitée, le serveur ne garde pas de session.
+    \item \textbf{Mise en cache :} les réponses indiquent si elles
+    peuvent être mises en cache.
+    \item \textbf{Interface uniforme :} URI, méthodes HTTP standards
+    (GET, POST, PUT, DELETE), codes de statut.
+    \item \textbf{Système en couches :} des intermédiaires (proxy, load
+    balancer) peuvent s'insérer de façon transparente.
+    \item \textbf{Code à la demande} (optionnel) : le serveur peut
+    envoyer du code exécutable.
+\end{enumerate}
+
+\sources
+\begin{itemize}
+    \item R. Fielding, Architectural Styles and the Design of
+    Network-based Software Architectures, thèse, University of
+    California, Irvine, 2000.
+\end{itemize}
+
+\subsubsection*{Question 59 (Moyen) : Services réseau essentiels dans une architecture microservices}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Découverte de services :} un registre (Consul, Eureka,
+    etcd) ou le DNS interne de Kubernetes (CoreDNS) permet à chaque
+    service de trouver les autres, même quand leurs IP changent.
+    \item \textbf{Communication inter-services :} synchrone (REST, gRPC)
+    ou asynchrone (files de messages : Kafka, RabbitMQ). Un
+    \textbf{service mesh} (Istio, Linkerd) peut gérer le chiffrement
+    mTLS, le routage et la répartition de charge.
+    \item \textbf{Monitoring et tracing distribué :} métriques
+    (Prometheus, Grafana), logs centralisés (ELK), traçage d'une requête
+    à travers tous les services (OpenTelemetry, Jaeger).
+    \item \textbf{Gestion des échecs :}
+    \begin{itemize}
+        \item \textbf{Retry} avec attente exponentielle
+        (\textit{exponential backoff}) pour les erreurs temporaires ;
+        \item \textbf{Circuit Breaker} : après plusieurs échecs, les
+        appels vers le service défaillant sont coupés pendant un temps,
+        pour éviter les pannes en cascade (Resilience4j, Istio) ;
+        \item \textbf{timeouts} et réponses de secours (\textit{fallback}).
+    \end{itemize}
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item M. Fowler, CircuitBreaker,
+    \url{https://martinfowler.com/bliki/CircuitBreaker.html}.
+\end{itemize}
+
+\subsubsection*{Question 60 (Avancé) : Rôle d'une API Gateway}
+
+\reponse
+L'API Gateway est le \textbf{point d'entrée unique} des clients vers
+les microservices. Elle cache la complexité interne : le client
+n'appelle qu'une seule adresse.
+
+\textbf{Fonctionnalités attendues :}
+\begin{itemize}
+    \item routage des requêtes vers le bon microservice ;
+    \item authentification et autorisation (OAuth2, JWT, clés d'API) ;
+    \item limitation de débit (\textit{rate limiting}) et quotas ;
+    \item terminaison TLS ;
+    \item agrégation de plusieurs appels en une seule réponse ;
+    \item transformation de protocoles et de formats (REST vers gRPC) ;
+    \item cache, journalisation, métriques et traçage ;
+    \item gestion des versions d'API.
+\end{itemize}
+
+\exemple
+Kong, NGINX, Spring Cloud Gateway, AWS API Gateway.
+
+\sources
+\begin{itemize}
+    \item C. Richardson, Pattern: API Gateway,
+    \url{https://microservices.io/patterns/apigateway.html}.
+\end{itemize}
+
+\paragraph{G. WebSocket et Communication en Temps Réel}
+
+\subsubsection*{Question 61 (Moyen) : HTTP classique et WebSocket}
+
+\reponse
+\begin{itemize}
+    \item \textbf{HTTP classique :} modèle requête/réponse. Seul le
+    client peut initier un échange, et chaque requête porte des
+    en-têtes complets. Le serveur ne peut pas envoyer de données de
+    lui-même.
+    \item \textbf{WebSocket :} après une négociation HTTP
+    (\texttt{Upgrade: websocket}), la connexion TCP reste
+    \textbf{ouverte}, \textbf{bidirectionnelle} et \textbf{full-duplex}.
+    Client et serveur envoient des messages à tout moment, avec très
+    peu de surcharge (ws:// ou wss:// avec TLS).
+\end{itemize}
+
+\textbf{Cas où WebSocket est préférable :} chat et messagerie
+instantanée, jeux en ligne, tableaux de bord temps réel, trading,
+édition collaborative, notifications instantanées.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 6455 : The WebSocket Protocol,
+    \url{https://www.rfc-editor.org/rfc/rfc6455}.
+\end{itemize}
+
+\subsubsection*{Question 62 (Pratique) : Comparaison des technologies temps réel}
+
+\reponse
+\begin{longtable}{|L{2.6cm}|L{6.2cm}|L{5.8cm}|}
+\hline
+\textbf{Technologie} & \textbf{Fonctionnement} & \textbf{Cas d'usage
+approprié} \\ \hline
+\endhead
+WebSocket & Connexion persistante, bidirectionnelle. & Chat, jeux
+multijoueurs, édition collaborative. \\ \hline
+Server-Sent Events (SSE) & Flux HTTP persistant, du serveur vers le
+client uniquement, reconnexion automatique. & Fil d'actualités, cours
+de bourse, notifications, suivi de commande. \\ \hline
+Long Polling & Le client envoie une requête que le serveur garde ouverte
+jusqu'à avoir une donnée, puis le client relance. & Solution de repli
+pour les anciens navigateurs ou les réseaux qui bloquent WebSocket. \\
+\hline
+HTTP/2 Server Push & Le serveur envoie des ressources liées à une
+requête avant qu'elles soient demandées. & Précharger CSS et JS d'une
+page. Ce n'est pas un vrai canal temps réel, et il est aujourd'hui
+abandonné par les navigateurs. \\ \hline
+\end{longtable}
+
+\sources
+\begin{itemize}
+    \item WHATWG, HTML Living Standard : Server-sent events,
+    \url{https://html.spec.whatwg.org/multipage/server-sent-events.html}.
+    \item IETF, RFC 6455, \url{https://www.rfc-editor.org/rfc/rfc6455}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 10 : Routage avancé}
+% --------------------------------------------------
+\membre{Abdelmadjid Baghdali \& Ouweis Wail Sari Bey}{63 à 71}
+
+\paragraph{A. BGP (Border Gateway Protocol)}
+
+\subsubsection*{Question 63 (Facile) : BGP, protocole de routage inter-domaines}
+
+\reponse
+BGP est \textbf{inter-domaines} car il route le trafic entre des
+\textbf{AS (Systèmes Autonomes)} gérés par des organisations
+indépendantes. Son rôle principal est d'\textbf{échanger les préfixes
+IP joignables entre AS}, ce qui fait fonctionner \textbf{Internet à
+l'échelle mondiale}.
+
+\subsubsection*{Question 64 (Moyen) : Différence entre iBGP et eBGP}
+
+\reponse
+\begin{itemize}
+    \item \textbf{eBGP :} session BGP entre routeurs de \textbf{deux AS
+    différents}, généralement directement connectés. Elle sert à
+    échanger les routes entre AS, et l'ASN est ajouté à
+    l'\textbf{AS\_PATH}.
+    \item \textbf{iBGP :} session BGP entre routeurs du \textbf{même AS},
+    pas forcément voisins. Elle sert à distribuer à l'intérieur de
+    l'AS les routes apprises en eBGP. L'\textbf{AS\_PATH} et le
+    \textbf{NEXT\_HOP} ne sont pas modifiés, et il faut un
+    \textbf{full mesh} ou un \textbf{Route Reflector}.
+    \item \textbf{Différence principale :} eBGP fonctionne
+    \textbf{entre AS} (échange externe), alors qu'iBGP fonctionne
+    \textbf{dans un même AS} (distribution interne).
+\end{itemize}
+
+\subsubsection*{Question 65 (Avancé) : Les Systèmes Autonomes (AS)}
+
+\reponse
+\begin{itemize}
+    \item \textbf{C'est quoi un AS ?}
+    Un groupe de réseaux/routeurs sous une même autorité
+    administrative, avec une seule politique de routage vers Internet.
+    \item \textbf{Comment les AS sont-ils identifiés ?}
+    Par un \textbf{ASN} (numéro de 16 ou 32 bits), attribué par
+    l'\textbf{IANA} via les \textbf{RIR}.
+    \item \textbf{Pourquoi sont-ils importants pour BGP ?}
+    BGP route \textbf{entre AS}, pas entre routeurs individuels.
+    L'\textbf{AS\_PATH} permet d'éviter les boucles et de choisir les
+    chemins, et les ASN servent à appliquer les politiques de routage
+    et à vérifier l'origine des préfixes (\textbf{RPKI}).
+\end{itemize}
+
+\subsubsection*{Question 66 (Réflexion) : Scénario : entreprise multi-homée (2 FAI)}
+
+\reponse
+Une entreprise e-commerce avec son propre \textbf{ASN} et un bloc
+\textbf{PI} se connecte à \textbf{deux FAI} via \textbf{eBGP}.
+
+\textbf{Pourquoi BGP est indispensable :}
+\begin{itemize}
+    \item \textbf{Redondance :} si le lien FAI 1 tombe, BGP
+    \textbf{retire la route} et bascule vers le FAI 2, sans changer d'IP.
+    \item \textbf{Contrôle du trafic :} \textbf{local preference}
+    (sortant), \textbf{AS-path prepending} / \textbf{communautés}
+    (entrant).
+    \item \textbf{Indépendance :} adresses \textbf{PI}, donc pas de
+    renumérotation en changeant de FAI.
+    \item \textbf{Sécurité :} \textbf{RPKI/ROA} contre les
+    \textbf{BGP hijacks}.
+\end{itemize}
+
+\paragraph{B. OSPF (Open Shortest Path First)}
+
+\subsubsection*{Question 67 (Moyen) : Avantages d'OSPF par rapport à RIP}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Type :} OSPF est \textbf{à état de liens} (algorithme
+    de \textbf{Dijkstra / SPF}), RIP est \textbf{à vecteur de distance}.
+    \item \textbf{Métrique :} OSPF utilise le \textbf{coût} (basé sur la
+    bande passante), RIP le \textbf{nombre de sauts} (max 15).
+    \item \textbf{Convergence :} OSPF converge \textbf{rapidement} grâce
+    aux mises à jour déclenchées ; RIP envoie toute sa table toutes les
+    30 s et converge lentement.
+    \item \textbf{Évolutivité :} OSPF gère les grands réseaux grâce aux
+    \textbf{areas} ; RIP est limité à 15 sauts.
+    \item \textbf{Autres :} VLSM/CIDR, authentification, pas de boucles
+    de routage, moins de trafic de mise à jour.
+\end{itemize}
+
+\subsubsection*{Question 68 (Avancé) : Les areas OSPF et l'Area 0}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Area :} groupe de routeurs qui partagent la même base
+    de données d'état de liens (\textbf{LSDB}). Découper en areas
+    \textbf{limite l'inondation des LSA}, réduit la taille des tables et
+    le calcul SPF, et permet de \textbf{résumer} les routes.
+    \item \textbf{Area 0 (backbone) :} zone centrale. \textbf{Toutes les
+    autres areas doivent y être connectées} (sinon : \textbf{virtual
+    link}). Tout le trafic inter-areas passe par l'Area 0.
+\end{itemize}
+
+\subsubsection*{Question 69 (Pratique) : Types de routeurs OSPF}
+
+\reponse
+\begin{itemize}
+    \item \textbf{DR (Designated Router) :} élu sur un réseau
+    multi-accès (Ethernet), il centralise les échanges d'état de liens,
+    ce qui évite un full mesh d'adjacences. Élection : \textbf{priorité}
+    la plus haute, puis \textbf{Router-ID} le plus haut.
+    \item \textbf{BDR (Backup DR) :} remplace le DR en cas de panne.
+    \item \textbf{ABR (Area Border Router) :} relie \textbf{une area à
+    l'Area 0} et résume les routes entre areas.
+    \item \textbf{ASBR (AS Boundary Router) :} \textbf{injecte des routes
+    externes} dans OSPF (statiques, BGP, autre protocole).
+\end{itemize}
+
+\paragraph{C. MPLS (Multiprotocol Label Switching)}
+
+\subsubsection*{Question 70 (Moyen) : Principe de fonctionnement de MPLS}
+
+\reponse
+MPLS achemine les paquets selon un \textbf{label} court (20 bits) placé
+entre l'en-tête de couche 2 et l'en-tête IP (« couche 2,5 »), au lieu
+de chercher l'adresse IP à chaque saut.
+\begin{itemize}
+    \item Le \textbf{LER d'entrée} classe le paquet dans une
+    \textbf{FEC} et lui \textbf{ajoute un label} (push).
+    \item Les \textbf{LSR} du cœur \textbf{remplacent le label} (swap)
+    en suivant un chemin prédéfini, le \textbf{LSP}.
+    \item Le \textbf{LER de sortie} \textbf{retire le label} (pop) et
+    livre le paquet IP.
+    \item Les labels sont distribués par \textbf{LDP} ou
+    \textbf{RSVP-TE}.
+\end{itemize}
+
+\subsubsection*{Question 71 (Avancé) : Avantages de MPLS}
+
+\reponse
+\begin{itemize}
+    \item \textbf{VPN :} les \textbf{L3VPN} (VRF + MP-BGP, RFC 4364)
+    isolent le trafic de plusieurs clients sur la même infrastructure,
+    même avec des adresses privées identiques. MPLS permet aussi des
+    \textbf{L2VPN} (VPLS, pseudowires).
+    \item \textbf{Ingénierie de trafic :} \textbf{RSVP-TE} impose des
+    chemins explicites, indépendants du plus court chemin IGP, pour
+    \textbf{équilibrer les liens} et réserver de la bande passante.
+    \textbf{Fast Reroute} bascule en moins de 50 ms.
+    \item \textbf{Qualité de service :} les \textbf{bits TC/EXP} (3 bits)
+    du label portent la classe de trafic, compatible
+    \textbf{DiffServ} ; la voix et la vidéo sont prioritaires de bout en
+    bout.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4271 (BGP-4), RFC 2328 (OSPFv2), RFC 3031 (MPLS
+    Architecture), RFC 4364 (BGP/MPLS IP VPNs),
+    \url{https://www.rfc-editor.org/}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 11 : IPsec et SSL/TLS}
+% --------------------------------------------------
+\membre{\dotfill}{72 à 77}
+
+\paragraph{A. IPsec}
+
+\subsubsection*{Question 72 (Facile) : Modes transport et tunnel d'IPsec}
+
+\reponse
+\begin{itemize}
+    \item \textbf{IPsec mode transport:} protects the useful part of
+    the IP packs, and eventually some parts of the header but it
+    conserves the original header of the pack, it's generally used in
+    communication host to host.
+    \item \textbf{IPsec mode tunnel:} it encapsulates the entire IP pack
+    with its header included (header + payload), in a new IP pack with
+    a new header so the original pack will be the payload for the new
+    pack with a new outer IP header, its used for VPN site to site or
+    gateway to gateway, because it allows the transition of the trafic
+    between two distant networks in a secured way.
+\end{itemize}
+
+\subsubsection*{Question 73 (Moyen) : AH et ESP}
+
+\reponse
+\begin{itemize}
+    \item \textbf{AH} provides only authentication and integrity for
+    packets, with no encryption or confidentiality. It protects the IP
+    packet including the IP header, except for mutable fields, so the
+    outer IP header is authenticated. However, this causes problems
+    with NAT, because NAT modifies the IP header that AH authenticates.
+    AH provides authentication without confidentiality and corresponds
+    to IP protocol number 51.
+    \item \textbf{ESP} can provide authentication, integrity, and
+    confidentiality. It protects the payload and, in tunnel mode, the
+    inner IP packet, but the outer IP header is not authenticated by
+    ESP. ESP is more NAT-friendly than AH, and NAT traversal is handled
+    through NAT-T. It is mostly used in IPsec VPNs to protect data
+    through encryption and corresponds to IP protocol number 50.
+\end{itemize}
+
+\subsubsection*{Question 74 (Pratique) : VPN IPsec site-à-site}
+
+\reponse
+\textbf{Scénario :} une entreprise a un siège à Alger et une agence à
+Oran, et veut relier leurs réseaux internes à travers Internet, de
+façon sécurisée et sans louer de ligne dédiée.
+
+\textbf{Architecture type :} chaque site possède une passerelle VPN
+(routeur ou pare-feu) avec une IP publique. Un tunnel IPsec en
+\textbf{mode tunnel} avec \textbf{ESP} est établi entre les deux
+passerelles. Les postes n'ont rien à configurer : le trafic entre
+192.168.10.0/24 (Alger) et 192.168.20.0/24 (Oran) est chiffré
+automatiquement par les passerelles.
+
+L'établissement se fait avec \textbf{IKEv2} (UDP 500, et 4500 avec
+NAT-T) : authentification par clé pré-partagée ou certificats, échange
+Diffie-Hellman, puis création des SA IPsec. Paramètres conseillés :
+AES-256-GCM, SHA-256, groupe DH 19 ou plus.
+
+\paragraph{B. SSL/TLS}
+
+\subsubsection*{Question 75 (Facile) : Différence entre SSL et TLS}
+
+\reponse
+SSL a été créé par Netscape (SSL 2.0 en 1995, SSL 3.0 en 1996). TLS est
+son successeur standardisé par l'IETF : TLS 1.0 (1999), 1.1 (2006), 1.2
+(2008) et 1.3 (2018). TLS corrige les failles de SSL (POODLE, etc.) et
+utilise des algorithmes plus robustes.
+
+SSL 1.0, 2.0, 3.0, TLS 1.0 et TLS 1.1 sont aujourd'hui \textbf{obsolètes
+et vulnérables}. TLS 1.2 reste acceptable, mais \textbf{TLS 1.3 est
+recommandé} : plus sûr, plus rapide, et la \textit{forward secrecy} y est
+obligatoire.
+
+Le terme « SSL » est encore souvent utilisé par abus de langage
+(« certificat SSL »), mais ce sont des connexions \textbf{TLS} qui sont
+déployées aujourd'hui.
+
+\subsubsection*{Question 76 (Moyen) : Le handshake TLS}
+
+\reponse
+Le handshake permet de \textbf{négocier les paramètres
+cryptographiques}, d'\textbf{authentifier le serveur} et de
+\textbf{dériver les clés de session}.
+
+\textbf{TLS 1.2 (environ 2 allers-retours) :} ClientHello \fl{}
+ServerHello \fl{} Certificate \fl{} échange de clés (ECDHE) \fl{}
+Finished.
+
+\textbf{TLS 1.3 (1-RTT) :} messages superflus supprimés, forward secrecy
+obligatoire.
+\begin{enumerate}
+    \item \textbf{ClientHello :} le client envoie les versions et suites
+    de chiffrement supportées, un nombre aléatoire et sa part de clé
+    Diffie-Hellman (\textit{key\_share}).
+    \item \textbf{ServerHello :} le serveur choisit la suite et envoie
+    sa part de clé. Les deux calculent alors la même clé secrète.
+    \item Le serveur envoie, déjà chiffrés, son \textbf{certificat}, une
+    signature \textbf{CertificateVerify} (preuve qu'il possède la clé
+    privée) et un message \textbf{Finished}.
+    \item Le client vérifie le certificat, puis envoie son
+    \textbf{Finished}.
+    \item Les données applicatives circulent chiffrées avec des clés
+    symétriques (AES-GCM, ChaCha20).
+\end{enumerate}
+
+\subsubsection*{Question 77 (Réflexion) : Certificats numériques et autorités de certification}
+
+\reponse
+Les certificats sont essentiels pour \textbf{lier une clé publique à une
+identité} (nom de domaine) et empêcher les attaques de type
+\textbf{homme du milieu}. Sans certificat valide, le chiffrement peut
+exister, mais \textbf{sans authentification fiable} : le client ne sait
+pas s'il parle au vrai serveur ou à un attaquant. Le \textbf{certificat
+X.509} contient la clé publique, l'identité et une date de validité.
+
+L'\textbf{autorité de certification (CA)} est un tiers de confiance qui
+vérifie l'identité du demandeur, \textbf{signe} le certificat et gère
+la \textbf{révocation} (CRL, OCSP). Le navigateur fait confiance aux CA
+racines déjà installées et vérifie la \textbf{chaîne de confiance}
+(racine \fl{} intermédiaire \fl{} certificat du site). La CA permet ainsi
+à un client de faire confiance à un serveur qu'il ne connaît pas a
+priori. Exemples : Let's Encrypt, DigiCert.
+
+\textbf{En bref :} TLS 1.3 est la version à utiliser ; le handshake
+établit une session sécurisée en 1-RTT ; les certificats et la CA
+garantissent l'authenticité du serveur et fondent la confiance sur
+Internet.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4301 (IPsec), RFC 7296 (IKEv2), RFC 8446 (TLS 1.3),
+    RFC 8996 (dépréciation de TLS 1.0/1.1), RFC 5280 (certificats X.509),
+    \url{https://www.rfc-editor.org/}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 12 : Firewalls et NAT}
+% --------------------------------------------------
+\membre{Benbraham Sara}{78 et 79}
+
+\paragraph{C. Firewalls et NAT}
+
+\subsubsection*{Question 78 (Moyen) : Différences entre les types de firewalls}
+
+\reponse
+Un firewall (pare-feu) est un dispositif matériel ou logiciel qui
+contrôle le trafic réseau selon des règles de sécurité afin
+d'autoriser ou de bloquer les communications.
+
+\begin{enumerate}
+    \item \textbf{Stateless (filtrage de paquets)}
+
+    Chaque paquet est examiné indépendamment, principalement selon les
+    adresses IP, les ports, le protocole et éventuellement les flags
+    TCP, à l'aide de règles de filtrage (ACL). Il est rapide et peu
+    coûteux en ressources, mais ne conserve aucun état des connexions.
+    Une règle trop permissive peut donc laisser passer des paquets
+    forgés qui semblent appartenir à un trafic autorisé.
+
+    \item \textbf{Stateful (inspection avec état)}
+
+    Le firewall maintient une table d'états contenant les informations
+    sur les connexions actives (adresses IP, ports, protocole, état et
+    temporisation). Pour une nouvelle connexion TCP, il vérifie
+    généralement le paquet initial SYN selon ses règles, puis autorise
+    les paquets de retour correspondant à la connexion suivie. Il offre
+    un meilleur contrôle contextuel, mais consomme davantage de
+    ressources et peut être ciblé par une attaque SYN flood visant à
+    épuiser ses ressources.
+
+    \item \textbf{Firewall applicatif (proxy, couche 7 du modèle OSI)}
+
+    Le proxy termine la connexion du client et établit une seconde
+    connexion vers le serveur. Il peut analyser les requêtes
+    applicatives (URL, commandes et contenu), appliquer des règles
+    d'authentification et bloquer certaines requêtes malveillantes. Il
+    offre un contrôle plus approfondi, mais peut introduire de la
+    latence et nécessite davantage de ressources. L'inspection du
+    contenu HTTPS nécessite généralement un mécanisme de déchiffrement
+    approprié.
+\end{enumerate}
+
+\textbf{Exemples :}
+\begin{itemize}
+    \item \textbf{Stateless :} autoriser les paquets TCP à destination
+    du port 80.
+    \item \textbf{Stateful :} autoriser les réponses appartenant à une
+    connexion TCP préalablement établie et suivie.
+    \item \textbf{Proxy :} bloquer une requête HTTP vers une URL
+    interdite ou détectée comme malveillante.
+\end{itemize}
+
+\subsubsection*{Question 79 (Avancé) : Fonctionnement du NAT et ses limitations}
+
+\reponse
+\textbf{1. Définition}
+
+Le NAT (Network Address Translation) est un mécanisme qui modifie les
+adresses IP dans les paquets réseau lors de leur passage entre deux
+réseaux. Il permet notamment à plusieurs appareils d'un réseau privé
+d'accéder à Internet en partageant une adresse IPv4 publique, lorsque
+le NAT est associé à la traduction des ports (PAT).
+
+\textbf{2. Fonctionnement du NAT}
+
+Le processus se déroule en quatre étapes :
+\begin{enumerate}
+    \item L'ordinateur envoie un paquet contenant son adresse IP privée
+    comme adresse source.
+    \item Le routeur remplace l'adresse source privée par son adresse
+    IP publique. Avec le PAT, il traduit également le port source.
+    \item Le serveur distant envoie sa réponse à l'adresse IP publique
+    et au port traduits.
+    \item Le routeur consulte sa table de traduction pour retrouver
+    l'adresse IP et le port privés du destinataire, puis lui transmet
+    la réponse.
+\end{enumerate}
+
+Le \textbf{PAT} (Port Address Translation), également appelé
+\textbf{NAT overload}, permet à plusieurs appareils de partager une
+même adresse IPv4 publique en utilisant des ports distincts pour
+différencier leurs communications.
+
+\textbf{3. Les limitations du NAT}
+\begin{itemize}
+    \item \textbf{Connexions entrantes :} un appareil derrière un NAT
+    n'est généralement pas directement accessible depuis Internet sans
+    configuration spécifique, comme une redirection de ports.
+    \item \textbf{Compatibilité des protocoles :} certains protocoles
+    transportent des adresses IP ou des ports dans leurs données et
+    nécessitent des mécanismes supplémentaires pour fonctionner
+    correctement à travers le NAT.
+    \item \textbf{Communications de bout en bout :} le NAT complique
+    les connexions directes entre appareils, notamment pour certaines
+    applications P2P et VoIP.
+    \item \textbf{Épuisement des ports :} avec le PAT, les ports
+    disponibles et les ressources de traduction peuvent devenir des
+    contraintes en cas de nombreuses connexions simultanées.
+    \item \textbf{Dépannage plus difficile :} les traductions
+    d'adresses compliquent l'identification des appareils internes et
+    l'analyse des journaux réseau.
+    \item \textbf{Sécurité limitée :} le NAT n'est pas un mécanisme de
+    sécurité suffisant à lui seul. Il ne remplace pas un firewall
+    configuré avec des règles de filtrage.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item RFC 2979 ; RFC 4987 ; RFC 3022 ; RFC 4787 (voir la
+    bibliographie générale).
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 13 : QoS}
+% --------------------------------------------------
+\membre{\dotfill}{80 à 83}
+
+\subsubsection*{Question 80 (Facile) : Pourquoi la QoS est-elle nécessaire ?}
+
+\reponse
+Un réseau transporte en même temps des trafics aux besoins très
+différents. Sans QoS, tous les paquets sont traités de la même façon
+(\textit{best effort}) : en cas de congestion, un téléchargement peut
+dégrader un appel VoIP ou une visioconférence. La QoS garantit aux
+flux critiques une \textbf{bande passante}, une \textbf{latence}, une
+\textbf{gigue} et un \textbf{taux de perte} adaptés.
+
+\exemple
+La voix exige une latence de moins de 150 ms (ITU-T G.114), une gigue
+inférieure à 30 ms et moins de 1~\% de perte.
+
+\sources
+\begin{itemize}
+    \item ITU-T, Recommandation G.114 : One-way transmission time,
+    \url{https://www.itu.int/}.
+\end{itemize}
+
+\subsubsection*{Question 81 (Moyen) : Classification, marquage, mise en file d'attente, policing et shaping}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Classification :} identifier le type de trafic (ACL,
+    ports, adresses, NBAR/DPI).
+    \item \textbf{Marquage :} inscrire la classe dans le paquet
+    (\textbf{DSCP} dans l'en-tête IP, \textbf{CoS} 802.1p en couche 2),
+    pour que les équipements suivants n'aient pas à reclasser.
+    \item \textbf{Mise en file d'attente :} en cas de congestion, les
+    paquets sont placés dans des files selon leur classe :
+    \textbf{LLQ} (file prioritaire stricte pour la voix), \textbf{CBWFQ}
+    (bande passante garantie par classe), \textbf{WRED} (rejet anticipé
+    pour éviter la saturation).
+    \item \textbf{Policing :} limite le débit en \textbf{rejetant} (ou
+    re-marquant) l'excédent, sans mise en mémoire.
+    \item \textbf{Shaping :} limite le débit en \textbf{retardant}
+    l'excédent dans un tampon ; le trafic est lissé, au prix d'un peu de
+    latence.
+\end{itemize}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 2475 : An Architecture for Differentiated Services,
+    \url{https://www.rfc-editor.org/rfc/rfc2475}.
+\end{itemize}
+
+\subsubsection*{Question 82 (Pratique) : Priorisation de la voix, de la vidéo et des données}
+
+\reponse
+\begin{longtable}{|L{2.4cm}|L{2.4cm}|L{3.6cm}|L{6.2cm}|}
+\hline
+\textbf{Priorité} & \textbf{Trafic} & \textbf{Marquage} &
+\textbf{Justification} \\ \hline
+1 & Voix & EF (DSCP 46), file LLQ & Très sensible à la latence et à la
+gigue, débit faible et constant. Limitée à environ 33~\% du lien pour
+ne pas affamer les autres. \\ \hline
+2 & Vidéo & AF41 (DSCP 34), CBWFQ & Sensible à la latence, débit élevé ;
+bande passante garantie. \\ \hline
+3 & Données critiques & AF21 / AF31 & Applications métier, tolèrent un
+peu de délai grâce aux retransmissions TCP. \\ \hline
+4 & Autres données & Best effort (DSCP 0) & Navigation, e-mail,
+téléchargements : élastiques et peu sensibles. \\ \hline
+\end{longtable}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 4594 : Configuration Guidelines for DiffServ Service
+    Classes, \url{https://www.rfc-editor.org/rfc/rfc4594}.
+\end{itemize}
+
+\subsubsection*{Question 83 (Avancé) : DiffServ et IntServ}
+
+\reponse
+\begin{longtable}{|L{3.2cm}|L{5.7cm}|L{5.7cm}|}
+\hline
+\textbf{Critère} & \textbf{IntServ} & \textbf{DiffServ} \\ \hline
+\endhead
+Principe & Réservation de ressources \textbf{par flux} & Traitement
+\textbf{par classe} (PHB) \\ \hline
+Signalisation & RSVP, de bout en bout & Aucune : marquage DSCP \\ \hline
+État dans les routeurs & Un état par flux & Aucun état par flux \\ \hline
+Garantie & Stricte & Relative (statistique) \\ \hline
+Évolutivité & Faible (impossible sur Internet) & Très bonne \\ \hline
+\end{longtable}
+
+\textbf{DiffServ est le plus utilisé aujourd'hui}, car il passe à
+l'échelle : les routeurs du cœur n'ont qu'un petit nombre de classes à
+gérer, quel que soit le nombre de flux. IntServ reste limité à de
+petits réseaux ou combiné à MPLS-TE.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 1633 (IntServ), RFC 2205 (RSVP), RFC 2474 et
+    RFC 2475 (DiffServ), \url{https://www.rfc-editor.org/}.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 14 : SDN et NFV}
+% --------------------------------------------------
+\membre{\dotfill}{84 à 88}
+
+\paragraph{A. SDN (Software-Defined Networking)}
+
+\subsubsection*{Question 84 : Qu'est-ce que le SDN ? Séparation du plan de contrôle et du plan de données}
+
+\reponse
+Le SDN (Software-Defined Networking) est une architecture réseau qui
+sépare l'intelligence du réseau (les décisions d'acheminement) des
+équipements qui transportent réellement les paquets. Cette intelligence
+est centralisée dans un contrôleur logiciel programmable, qui dispose
+d'une vue globale de la topologie.
+
+\begin{itemize}
+    \item \textbf{Plan de données (data plane) :} il transfère les
+    paquets (commutation, routage, filtrage) en appliquant des règles
+    déjà définies. Il est exécuté par les switchs et routeurs, à la
+    vitesse du matériel.
+    \item \textbf{Plan de contrôle (control plane) :} il décide où
+    envoyer le trafic (calcul des routes, tables MAC, politiques). Dans
+    un réseau traditionnel, chaque équipement possède son propre plan de
+    contrôle (OSPF, STP, etc.) ; en SDN, il est centralisé dans le
+    contrôleur (OpenDaylight, ONOS, Ryu, etc.).
+\end{itemize}
+
+Une couche applications (pare-feu, répartition de charge, QoS,
+supervision) s'ajoute au-dessus du contrôleur. L'architecture comporte
+donc trois couches reliées par deux types d'interfaces :
+
+\begin{longtable}{|L{3cm}|L{5.8cm}|L{5.8cm}|}
+\hline
+\textbf{Couche} & \textbf{Rôle} & \textbf{Interface} \\ \hline
+Applications & Pare-feu, load balancer, QoS, supervision & API
+northbound (REST) vers le contrôleur \\ \hline
+Contrôleur & Cerveau logique, vue globale du réseau & API southbound
+(OpenFlow, NETCONF) vers les équipements \\ \hline
+Infrastructure & Switchs et routeurs qui transfèrent les paquets & -- \\
+\hline
+\end{longtable}
+
+\exemple
+Dans un réseau d'entreprise, un administrateur définit depuis le
+contrôleur une politique unique (« le VLAN invités ne peut pas accéder
+aux serveurs internes »). Le contrôleur la traduit en règles installées
+automatiquement sur tous les switchs concernés, sans configurer chaque
+équipement un par un.
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 7426 : Software-Defined Networking (SDN) : Layers and
+    Architecture Terminology, \url{https://www.rfc-editor.org/rfc/rfc7426},
+    consulté le 18 octobre 2026.
+    \item Open Networking Foundation, SDN Architecture Overview,
+    \url{https://opennetworking.org/}, consulté le 18 octobre 2026.
+\end{itemize}
+
+\subsubsection*{Question 85 : Qu'est-ce qu'OpenFlow ? Quel est son rôle dans le SDN ?}
+
+\reponse
+OpenFlow est un protocole standardisé par l'ONF (Open Networking
+Foundation). C'est le protocole southbound historique du SDN : il permet
+au contrôleur de programmer directement les tables de flux des
+équipements réseau.
+
+\begin{itemize}
+    \item Un switch OpenFlow contient une ou plusieurs \textbf{tables de
+    flux}. Chaque entrée comprend des champs de correspondance (match :
+    port d'entrée, adresses MAC et IP, VLAN, ports TCP/UDP, etc.), des
+    actions (transférer, rejeter, modifier un en-tête, envoyer au
+    contrôleur), des compteurs et des délais d'expiration.
+    \item Le canal entre le contrôleur et le switch est sécurisé (TLS).
+    \item Messages principaux : \textbf{Packet-In} (le switch ne connaît
+    pas le flux et interroge le contrôleur), \textbf{Flow-Mod} (le
+    contrôleur installe ou modifie une règle), \textbf{Packet-Out} et les
+    messages de statistiques.
+\end{itemize}
+
+\textbf{Rôle dans le SDN :} OpenFlow est le « langage commun » entre le
+plan de contrôle centralisé et le plan de données. Il permet un contrôle
+fin, flux par flux, indépendant du constructeur des équipements.
+
+\exemple
+Un premier paquet d'un nouveau flux arrive sur un switch qui n'a aucune
+règle correspondante. Le switch envoie un Packet-In au contrôleur ;
+celui-ci décide du chemin et répond par un Flow-Mod. Les paquets
+suivants du même flux sont ensuite traités directement par le switch,
+sans solliciter à nouveau le contrôleur.
+
+\sources
+\begin{itemize}
+    \item Open Networking Foundation, OpenFlow Switch Specification,
+    \url{https://opennetworking.org/}, consulté le 18 octobre 2026.
+    \item IETF, RFC 7426, \url{https://www.rfc-editor.org/rfc/rfc7426},
+    consulté le 18 octobre 2026.
+\end{itemize}
+
+\subsubsection*{Question 86 : Quels avantages le SDN apporte-t-il par rapport aux réseaux traditionnels ?}
+
+\reponse
+\begin{itemize}
+    \item \textbf{Centralisation et vue globale :} une politique
+    cohérente est appliquée à l'ensemble du réseau depuis un point
+    unique.
+    \item \textbf{Programmabilité et automatisation :} la configuration
+    se fait par API ou scripts, ce qui évite la configuration manuelle
+    équipement par équipement et réduit les erreurs humaines.
+    \item \textbf{Agilité :} le déploiement de VLAN, de services ou de
+    politiques passe de plusieurs jours à quelques minutes.
+    \item \textbf{Ouverture :} les standards ouverts réduisent la
+    dépendance à un constructeur unique.
+    \item \textbf{Optimisation du trafic :} l'ingénierie de trafic
+    dynamique permet une meilleure utilisation de la bande passante.
+    \item \textbf{Sécurité :} isolation et micro-segmentation
+    dynamiques, mise en quarantaine automatique d'un hôte compromis.
+    \item \textbf{Réduction des coûts} d'investissement et
+    d'exploitation.
+\end{itemize}
+
+\textbf{Limites à signaler :} le contrôleur est un point de défaillance
+unique s'il n'est pas déployé en cluster, il devient une cible
+d'attaque privilégiée, et la migration depuis un réseau existant est
+complexe.
+
+\exemple
+\begin{longtable}{|L{3.6cm}|L{5.5cm}|L{5.5cm}|}
+\hline
+\textbf{Critère} & \textbf{Réseau traditionnel} & \textbf{Réseau SDN}
+\\ \hline
+Configuration & Manuelle, équipement par équipement & Centralisée,
+automatisée \\ \hline
+Plan de contrôle & Distribué dans chaque équipement & Centralisé dans le
+contrôleur \\ \hline
+Évolutivité des politiques & Lente, risque d'incohérences & Rapide,
+cohérente \\ \hline
+Dépendance constructeur & Forte & Réduite (standards ouverts) \\ \hline
+\end{longtable}
+
+\sources
+\begin{itemize}
+    \item Cisco, Software-Defined Networking (SDN) : vue d'ensemble,
+    \url{https://www.cisco.com/}, consulté le 18 octobre 2026.
+    \item Open Networking Foundation, \url{https://opennetworking.org/},
+    consulté le 18 octobre 2026.
+\end{itemize}
+
+\paragraph{B. NFV (Network Function Virtualization)}
+
+\subsubsection*{Question 87 : Qu'est-ce que la NFV ? Exemples de fonctions réseau virtualisables}
+
+\reponse
+La NFV (Network Function Virtualization) consiste à remplacer les
+équipements réseau dédiés (boîtiers matériels propriétaires) par des
+fonctions réseau logicielles, appelées \textbf{VNF} (Virtualized Network
+Functions), qui s'exécutent sur des serveurs standards via des machines
+virtuelles ou des conteneurs.
+
+L'architecture définie par l'ETSI comporte trois blocs :
+\begin{itemize}
+    \item \textbf{VNF :} la fonction réseau logicielle elle-même ;
+    \item \textbf{NFVI} (NFV Infrastructure) : serveurs, hyperviseur et
+    réseau virtuel qui hébergent les VNF ;
+    \item \textbf{MANO} (Management and Orchestration) : gestion du cycle
+    de vie et orchestration des VNF.
+\end{itemize}
+
+\textbf{Exemples de fonctions virtualisables :}
+\begin{itemize}
+    \item routeur virtuel (vRouter) et switch virtuel (Open vSwitch) ;
+    \item pare-feu et NGFW virtuels ;
+    \item IDS/IPS (Snort, Suricata) ;
+    \item répartiteur de charge, reverse proxy et WAF ;
+    \item NAT, DHCP et DNS ;
+    \item passerelle VPN et SD-WAN ;
+    \item DPI et optimiseur WAN ;
+    \item cœur de réseau mobile (vEPC, cœur 5G) et IMS.
+\end{itemize}
+
+\exemple
+Au lieu d'acheter un pare-feu matériel pour chaque site, une entreprise
+déploie un pare-feu virtuel sur un serveur standard. En cas de pic de
+trafic, l'orchestrateur lance une seconde instance en quelques minutes.
+
+\sources
+\begin{itemize}
+    \item ETSI, GS NFV 002 : Network Functions Virtualisation (NFV) ;
+    Architectural Framework, \url{https://www.etsi.org/technologies/nfv},
+    consulté le 18 octobre 2026.
+\end{itemize}
+
+\subsubsection*{Question 88 : Relation entre SDN et NFV : complémentaires ou concurrents ?}
+
+\reponse
+Le SDN et la NFV sont \textbf{complémentaires et non concurrents}. Ils
+sont indépendants (on peut déployer l'un sans l'autre), mais leur
+association est particulièrement efficace.
+
+\begin{longtable}{|L{2.4cm}|L{6.1cm}|L{6.1cm}|}
+\hline
+ & \textbf{SDN} & \textbf{NFV} \\ \hline
+Objectif & Contrôler et programmer le réseau (séparer contrôle et
+données) & Virtualiser les fonctions réseau (découpler logiciel et
+matériel) \\ \hline
+Cible & L'acheminement du trafic & Les fonctions (pare-feu, load
+balancer, etc.) \\ \hline
+Moyen & Contrôleur et protocole OpenFlow & VNF sur serveurs standards \\
+\hline
+\end{longtable}
+
+\textbf{Synergie :} la NFV fournit des fonctions souples et élastiques ;
+le SDN dirige dynamiquement le trafic à travers elles. On parle de
+\textbf{service chaining} : par exemple client \fl{} pare-feu virtuel
+\fl{} IDS virtuel \fl{} répartiteur de charge virtuel. L'orchestrateur
+crée ou supprime les VNF selon la charge, et le contrôleur SDN adapte
+les chemins en conséquence.
+
+\exemple
+Dans un datacenter, un contrôleur SDN oriente le trafic web entrant vers
+un WAF virtuel, puis vers un load balancer virtuel, avant d'atteindre
+les serveurs d'application. Chaque VNF peut être dupliquée ou retirée
+sans modifier la topologie physique.
+
+\sources
+\begin{itemize}
+    \item ETSI, GS NFV 002, \url{https://www.etsi.org/technologies/nfv},
+    consulté le 18 octobre 2026.
+    \item IETF, RFC 7426, \url{https://www.rfc-editor.org/rfc/rfc7426},
+    consulté le 18 octobre 2026.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Membre 15 : Synthèse globale et architecture}
+% --------------------------------------------------
+\membre{\dotfill}{89}
+
+\subsubsection*{Question 89 : Infrastructure réseau d'un campus de 5000 utilisateurs}
+
+\textbf{Énoncé :} concevoir l'infrastructure réseau d'un campus
+universitaire de 5000 utilisateurs, avec 3 bâtiments distants, des
+services administratifs, pédagogiques et de recherche, des besoins de
+sécurité élevés et une connexion Internet via deux FAI différents.
+
+\paragraph{a) Services réseau obligatoires et justification}
+
+\begin{longtable}{|L{4.4cm}|L{10.2cm}|}
+\hline
+\textbf{Service} & \textbf{Justification} \\ \hline
+\endhead
+VLAN et trunking 802.1Q & Segmenter les populations (administratif,
+pédagogique, recherche, invités, serveurs, gestion), limiter les
+domaines de broadcast et isoler les zones. \\ \hline
+Routage inter-VLAN (switchs L3 au cœur) & Routage interne performant et
+application des ACL entre zones. \\ \hline
+OSPF (interne) et BGP (vers les FAI) & Convergence rapide, évolutivité
+et gestion du multi-homing avec deux FAI. \\ \hline
+DHCP (avec failover) & Adressage automatique de 5000 utilisateurs, avec
+un pool par VLAN. \\ \hline
+DNS (interne, externe, secondaire) & Résolution de noms, indispensable à
+tous les services ; split-DNS entre interne et externe. \\ \hline
+NAT/PAT & Économie d'adresses publiques et masquage du plan d'adressage
+interne. \\ \hline
+Pare-feu NGFW et DMZ & Filtrage périmétrique et protection des serveurs
+exposés. \\ \hline
+IDS/IPS & Détection et blocage des attaques. \\ \hline
+AAA (RADIUS/802.1X, TACACS+) & Authentification, autorisation et
+traçabilité des accès des utilisateurs et des administrateurs. \\ \hline
+Annuaire (Active Directory/LDAP) & Gestion centralisée des identités. \\
+\hline
+VPN (IPsec/SSL) & Accès distant sécurisé pour les enseignants et
+chercheurs, interconnexion de sites. \\ \hline
+NTP & Horloges synchronisées (journaux, certificats, Kerberos). \\ \hline
+Syslog/SIEM, SNMP, NetFlow & Supervision, corrélation d'événements et
+audit. \\ \hline
+Proxy, reverse proxy, WAF & Filtrage web sortant, protection et
+publication des applications. \\ \hline
+QoS & Priorité à la voix, à la visioconférence et aux applications
+critiques. \\ \hline
+Sauvegarde des configurations & Restauration rapide après un incident
+(SFTP/TFTP sécurisé). \\ \hline
+WiFi (contrôleurs WLC, WPA2/WPA3-Enterprise) & Mobilité des 5000
+utilisateurs. \\ \hline
+\end{longtable}
+
+\paragraph{b) Authentification et gestion des utilisateurs}
+
+\begin{itemize}
+    \item \textbf{Annuaire central AD/LDAP} répliqué (au moins deux
+    contrôleurs de domaine par site principal), avec des groupes :
+    étudiants, enseignants, administratifs, chercheurs, invités.
+    \item \textbf{802.1X avec RADIUS} (FreeRADIUS ou NPS) sur les ports
+    filaires et le WiFi, en EAP-TLS ou PEAP, couplé à l'annuaire. Le
+    serveur RADIUS attribue dynamiquement le VLAN selon le groupe de
+    l'utilisateur. Une fédération de type eduroam permet l'accueil des
+    visiteurs académiques.
+    \item \textbf{MFA} pour les comptes sensibles (administrateurs,
+    recherche, VPN).
+    \item \textbf{TACACS+} pour l'accès aux équipements réseau, avec
+    contrôle d'accès basé sur les rôles (RBAC) et journalisation de
+    chaque commande.
+    \item \textbf{Portail captif} pour les invités : comptes temporaires,
+    VLAN isolé, accès à Internet uniquement.
+    \item \textbf{Cycle de vie des comptes :} création automatique à
+    l'inscription, désactivation au départ, politique de mots de passe,
+    audit périodique.
+\end{itemize}
+
+\paragraph{c) Supervision et monitoring}
+
+\begin{itemize}
+    \item \textbf{Disponibilité et performance :} Zabbix, LibreNMS ou
+    PRTG via SNMPv3 (CPU, mémoire, interfaces, température), avec seuils
+    et alertes par mail ou SMS.
+    \item \textbf{Analyse du trafic :} NetFlow/IPFIX (ntopng, Elastiflow)
+    pour détecter les anomalies et planifier la capacité.
+    \item \textbf{Journalisation centralisée :} Syslog vers une pile
+    ELK/SIEM (Elasticsearch, Logstash, Kibana) avec des règles de
+    détection (force brute, scans, mouvements latéraux), idéalement
+    opérée par un SOC.
+    \item \textbf{Tableaux de bord} Grafana ou Kibana, sondes actives
+    (ping, HTTP, DNS) et mesure des SLA.
+    \item \textbf{Réseau de gestion séparé} (VLAN dédié ou
+    \textit{out-of-band}) pour que la supervision reste disponible en
+    cas de panne du réseau de production.
+\end{itemize}
+
+\paragraph{d) Redondance et haute disponibilité}
+
+\begin{itemize}
+    \item \textbf{Topologie hiérarchique} (cœur, distribution, accès)
+    avec un double cœur ; chaque bâtiment est relié aux deux cœurs.
+    \item \textbf{Liaisons inter-bâtiments en fibre redondante}, par des
+    chemins physiques distincts.
+    \item \textbf{EtherChannel (LACP)} pour agréger les liens et tolérer
+    une panne, \textbf{RSTP/MST} contre les boucles.
+    \item \textbf{FHRP (HSRP/VRRP)} : passerelle par défaut redondante
+    pour chaque VLAN.
+    \item \textbf{Double FAI :} BGP (idéalement avec un bloc d'adresses
+    et un AS propres) ou, à défaut, routes statiques flottantes avec IP
+    SLA, voire routage par politique ; fonctionnement actif/passif ou
+    avec répartition de charge.
+    \item \textbf{Pare-feu en cluster HA} (actif/passif avec
+    synchronisation d'état), alimentations redondantes et onduleurs.
+    \item \textbf{Services critiques répliqués :} DHCP failover, DNS
+    maître et esclaves, plusieurs contrôleurs AD et serveurs RADIUS,
+    virtualisation en cluster.
+    \item \textbf{Sauvegardes testées} et plan de reprise d'activité
+    (PRA).
+\end{itemize}
+
+\paragraph{e) Mécanismes de sécurité par niveau}
+
+\begin{longtable}{|L{3.4cm}|L{11.2cm}|}
+\hline
+\textbf{Niveau} & \textbf{Mesures} \\ \hline
+\endhead
+Physique & Locaux techniques fermés, contrôle d'accès,
+vidéosurveillance, ports inutilisés désactivés. \\ \hline
+Couche 2 (accès) & 802.1X, port security, DHCP snooping, DAI, IP Source
+Guard, BPDU guard et root guard, VLAN natif inutilisé, désactivation de
+DTP. \\ \hline
+Couche 3 (réseau) & Segmentation par VLAN et zones, ACL entre zones
+(recherche isolée, invités sans accès interne), uRPF, authentification
+OSPF/BGP. \\ \hline
+Périmètre & NGFW, IPS, DMZ, protection anti-DDoS, filtrage URL et DNS.
+\\ \hline
+Application & WAF, reverse proxy, TLS partout, durcissement des
+serveurs, mises à jour régulières. \\ \hline
+Terminaux & Antivirus/EDR, contrôle de conformité (NAC), chiffrement
+des disques. \\ \hline
+Administration & SSH uniquement, TACACS+, réseau de gestion isolé,
+sauvegarde des configurations. \\ \hline
+Détection et réponse & SIEM, alertes, procédures de gestion d'incident,
+audits et tests d'intrusion. \\ \hline
+Données & VPN IPsec/SSL, chiffrement, politique de sauvegarde. \\ \hline
+\end{longtable}
+
+\textbf{Principes directeurs :} défense en profondeur, moindre
+privilège et Zero Trust.
+
+\paragraph{f) Gestion de la QoS}
+
+\begin{enumerate}
+    \item \textbf{Classification et marquage} à la frontière de
+    confiance (switchs d'accès) en DSCP ; les téléphones IP et
+    équipements de confiance conservent leur marquage.
+    \item \textbf{Classes de trafic :}
+    \begin{itemize}
+        \item voix (VoIP) : EF, file prioritaire stricte (LLQ), faible
+        latence ;
+        \item visioconférence et cours en ligne : AF4x, bande passante
+        garantie ;
+        \item applications critiques (administration, ENT,
+        authentification) : AF3x ;
+        \item trafic standard : best effort ;
+        \item trafic non essentiel (P2P, streaming, téléchargements
+        massifs) : scavenger (CS1), bande passante limitée.
+    \end{itemize}
+    \item \textbf{Mécanismes :} files CBWFQ/LLQ, WRED contre la
+    congestion, policing en entrée et shaping sur les liens vers les FAI.
+    \item \textbf{Cohérence :} même politique sur tous les équipements
+    (cœur, distribution, WAN), avec un suivi de la bande passante par FAI
+    via NetFlow.
+\end{enumerate}
+
+\paragraph{g) Schéma simplifié de l'architecture}
+
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners, align=center, font=\small,
+              minimum width=3.2cm, minimum height=1cm, fill=blue!5},
+  >=latex]
+  \node[box] (f1) at (-2.5,6) {FAI 1\\BGP, lien 1};
+  \node[box] (f2) at (2.5,6)  {FAI 2\\BGP, lien 2};
+  \node[box, fill=red!8] (fw) at (0,4.3) {Pare-feu NGFW (HA)\\IPS, NAT, VPN};
+  \node[box] (dmz) at (5,4.3) {DMZ\\Reverse proxy, WAF};
+  \node[box] (c1) at (-2.2,2.5) {Cœur 1 (L3)\\OSPF, HSRP};
+  \node[box] (c2) at (2.2,2.5)  {Cœur 2 (L3)\\OSPF, HSRP};
+  \node[box] (sup) at (-6,2.5) {Supervision\\SIEM, Zabbix};
+  \node[box] (dc) at (6,2.5) {Datacenter\\AD, DNS, DHCP};
+  \node[box] (ba) at (-4.2,0.3) {Bâtiment A\\Accès + WiFi};
+  \node[box] (bb) at (0,0.3)    {Bâtiment B\\Accès + WiFi};
+  \node[box] (bc) at (4.2,0.3)  {Bâtiment C\\Accès + WiFi};
+  \draw (f1)--(fw); \draw (f2)--(fw); \draw (fw)--(dmz);
+  \draw (fw)--(c1); \draw (fw)--(c2);
+  \draw[very thick] (c1)--node[above,font=\scriptsize]{LACP}(c2);
+  \draw (sup)--(c1); \draw (c2)--(dc);
+  \foreach \b in {ba,bb,bc}{\draw (\b)--(c1); \draw (\b)--(c2);}
+\end{tikzpicture}
+\end{center}
+
+Chaque bâtiment est relié aux deux cœurs par des liaisons en fibre
+redondantes (LACP). Les VLAN (administratif, pédagogique, recherche,
+invités, serveurs, gestion) sont définis dans les trois bâtiments et
+routés par les cœurs, avec des ACL entre zones. La QoS est appliquée de
+bout en bout.
+
+\paragraph{h) Intérêt des technologies web et d'infrastructure}
+
+\textbf{1. Proxy et reverse proxy.}
+
+\begin{longtable}{|L{2.6cm}|L{6cm}|L{6cm}|}
+\hline
+ & \textbf{Proxy (forward)} & \textbf{Reverse proxy} \\ \hline
+Position & Devant les clients (côté utilisateur) & Devant les serveurs
+(côté application) \\ \hline
+Rôle & Les clients internes accèdent à Internet par son intermédiaire &
+Les clients externes accèdent aux serveurs par son intermédiaire \\ \hline
+Cas d'usage & Filtrage web, contrôle d'accès, journalisation,
+anonymisation & Publication d'applications, terminaison TLS, répartition
+de charge \\ \hline
+Exemples & Squid & Nginx, HAProxy, Traefik \\ \hline
+\end{longtable}
+
+\begin{itemize}
+    \item \textbf{Sécurité :} le proxy filtre les URL, bloque les
+    logiciels malveillants et trace les accès ; le reverse proxy masque
+    l'architecture interne, centralise TLS, intègre un WAF et limite les
+    attaques (DDoS, injections).
+    \item \textbf{Performance :} cache des contenus, compression,
+    mutualisation des connexions, terminaison TLS déchargée des serveurs.
+    \item \textbf{Disponibilité :} le reverse proxy répartit la charge,
+    détecte les serveurs en panne (health checks) et bascule le trafic.
+\end{itemize}
+
+\textbf{2. CDN (Content Delivery Network).}
+\begin{itemize}
+    \item \textbf{Principe :} réseau de serveurs de cache (edge servers)
+    répartis géographiquement. L'utilisateur est dirigé, via DNS ou
+    Anycast, vers le serveur le plus proche, qui sert le contenu sans
+    solliciter le serveur d'origine. Cela réduit la latence et la charge
+    sur l'origine, et absorbe les pics de trafic et une partie des
+    attaques DDoS.
+    \item \textbf{Stratégies de cache :}
+    \begin{itemize}
+        \item durée de vie (TTL) et en-têtes Cache-Control et Expires ;
+        \item revalidation conditionnelle avec ETag et Last-Modified
+        (réponse 304) ;
+        \item contenu statique (images, CSS, JS) mis en cache longtemps
+        avec des noms de fichiers versionnés ; contenu dynamique peu ou
+        pas mis en cache ;
+        \item purge ou invalidation manuelle ou automatique ; clé de
+        cache (URL, en-têtes, cookies) ;
+        \item modèles pull (le CDN récupère à la demande) ou push
+        (contenu préchargé).
+    \end{itemize}
+\end{itemize}
+Exemples : Cloudflare, Akamai, Amazon CloudFront.
+
+\textbf{3. Load balancing web.}
+\begin{itemize}
+    \item \textbf{Intérêt :} répartir les requêtes sur plusieurs
+    serveurs pour la performance, la scalabilité et la disponibilité
+    (suppression des points de défaillance uniques), et permettre la
+    maintenance sans interruption.
+    \item \textbf{Niveaux :} couche 4 (TCP/UDP, rapide) et couche 7
+    (HTTP : routage selon l'URL, les en-têtes ou les cookies).
+    \item \textbf{Algorithmes :} round robin, round robin pondéré, least
+    connections, IP hash, least response time.
+    \item \textbf{Fonctions :} health checks, persistance de session,
+    terminaison SSL, redondance du répartiteur lui-même
+    (Keepalived/VRRP).
+\end{itemize}
+Exemples : HAProxy, Nginx, F5, AWS Elastic Load Balancing.
+
+\textbf{4. DNS pour services web.}
+\begin{itemize}
+    \item \textbf{GeoDNS :} répond avec une adresse IP différente selon
+    la localisation du client, afin de diriger l'utilisateur vers le
+    datacenter le plus proche (latence, conformité).
+    \item \textbf{DNS Failover :} des sondes surveillent la santé des
+    serveurs et le DNS retire automatiquement l'adresse défaillante, avec
+    un TTL court pour une bascule rapide ; limite : dépend des caches
+    DNS.
+    \item \textbf{Anycast :} la même adresse IP est annoncée en BGP
+    depuis plusieurs sites ; le routage achemine le client vers le site
+    le plus proche. Il offre une faible latence, de la résilience et une
+    bonne résistance aux DDoS (serveurs DNS racine, CDN).
+\end{itemize}
+
+\textbf{5. API REST et microservices.}
+\begin{itemize}
+    \item \textbf{Principes REST :} architecture client-serveur, sans
+    état (stateless), interface uniforme (ressources identifiées par des
+    URI, verbes HTTP GET, POST, PUT, DELETE, représentations en JSON),
+    réponses pouvant être mises en cache, système en couches, codes de
+    statut HTTP standards.
+    \item \textbf{Architecture microservices :} l'application est
+    découpée en petits services indépendants, chacun avec une fonction
+    métier et sa propre base de données, déployables et dimensionnables
+    séparément (conteneurs, Docker, Kubernetes). Avantages : agilité,
+    résilience, scalabilité ciblée. Inconvénients : complexité, latence
+    réseau, cohérence des données, supervision plus difficile.
+    \item \textbf{API Gateway :} point d'entrée unique devant les
+    microservices. Elle assure le routage, l'authentification et
+    l'autorisation (OAuth2, JWT), la limitation de débit (rate limiting),
+    le cache, la composition de réponses, la journalisation et la
+    supervision (Kong, NGINX, AWS API Gateway).
+\end{itemize}
+
+\textbf{6. WebSocket.} Communication temps réel : après une négociation
+HTTP (\texttt{Upgrade: websocket}), WebSocket établit une connexion TCP
+persistante et bidirectionnelle (\textit{full-duplex}) entre le client et
+le serveur. Chaque partie peut envoyer des messages à tout moment, avec
+très peu d'en-têtes. Usages : chat, jeux en ligne, trading, collaboration
+en direct, notifications.
+
+\begin{longtable}{|L{2.2cm}|L{4.1cm}|L{4.1cm}|L{4.1cm}|}
+\hline
+ & \textbf{WebSocket} & \textbf{SSE (Server-Sent Events)} &
+\textbf{Long Polling} \\ \hline
+Sens & Bidirectionnel & Serveur vers client uniquement & Pseudo-push
+(requêtes répétées) \\ \hline
+Connexion & Persistante (ws/wss) & Persistante (HTTP) & Requête
+maintenue puis renouvelée \\ \hline
+Complexité & Plus élevée & Simple, reconnexion automatique & Simple,
+compatible partout \\ \hline
+Surcharge & Faible & Faible & Élevée (en-têtes HTTP à chaque cycle) \\
+\hline
+Cas d'usage & Chat, jeux, temps réel interactif & Flux de notifications,
+cours de bourse & Solution de repli, anciens navigateurs \\ \hline
+\end{longtable}
+
+\sources
+\begin{itemize}
+    \item IETF, RFC 2474 : Definition of the Differentiated Services
+    Field, \url{https://www.rfc-editor.org/rfc/rfc2474}, consulté le 18
+    octobre 2026.
+    \item IETF, RFC 2865 : RADIUS,
+    \url{https://www.rfc-editor.org/rfc/rfc2865}, consulté le 18 octobre
+    2026.
+    \item IETF, RFC 4786 : Operation of Anycast Services,
+    \url{https://www.rfc-editor.org/rfc/rfc4786}, consulté le 18 octobre
+    2026.
+    \item IETF, RFC 6455 : The WebSocket Protocol,
+    \url{https://www.rfc-editor.org/rfc/rfc6455}, consulté le 18 octobre
+    2026.
+    \item IETF, RFC 9110 : HTTP Semantics,
+    \url{https://www.rfc-editor.org/rfc/rfc9110}, consulté le 18 octobre
+    2026.
+    \item Cisco, documentation réseau, \url{https://www.cisco.com/},
+    consulté le 18 octobre 2026.
+\end{itemize}
+
+% ==================================================
+\section{Conclusion générale}
+% ==================================================
+
+Les services étudiés forment un ensemble cohérent. Les services
+fondamentaux (DNS, DHCP, NTP) assurent la connectivité de base ;
+l'annuaire et AAA (LDAP, RADIUS, TACACS+, Kerberos) contrôlent qui accède
+à quoi ; la supervision (SNMP, Syslog, NetFlow) donne la visibilité ; le
+routage (OSPF, BGP, MPLS) relie les sites et Internet ; la sécurité
+(IPsec, TLS, pare-feu, NAT) protège les échanges ; la QoS garantit la
+performance des flux critiques ; enfin, les services web, le SDN et la
+NFV apportent la disponibilité, l'automatisation et la flexibilité
+nécessaires à une infrastructure d'entreprise moderne.
+
+% ==================================================
+\section{Bibliographie générale}
+% ==================================================
+
+\begin{enumerate}
+    \item RFC 1034, RFC 1035 (DNS) ; RFC 4033 (DNSSEC).
+    \item RFC 2131, RFC 2132 (DHCP) ; RFC 5905 (NTPv4).
+    \item RFC 4511, RFC 4512, RFC 4514 (LDAP) ; RFC 2865, RFC 2866
+    (RADIUS) ; RFC 8907 (TACACS+) ; RFC 4120 (Kerberos V5).
+    \item RFC 1213, RFC 3411, RFC 3414, RFC 3416 (SNMP) ; RFC 5424
+    (Syslog) ; RFC 3954 (NetFlow v9) ; RFC 7011 (IPFIX).
+    \item RFC 9110, RFC 9111, RFC 9113, RFC 9114 (HTTP) ; RFC 9000 (QUIC)
+    ; RFC 5789 (PATCH) ; RFC 1794 (DNS load balancing) ; RFC 4786
+    (Anycast) ; RFC 6455 (WebSocket).
+    \item R. Fielding, Architectural Styles and the Design of
+    Network-based Software Architectures, thèse, 2000.
+    \item RFC 4271 (BGP-4) ; RFC 1930 (AS) ; RFC 6793 (ASN 4 octets) ;
+    RFC 2328 (OSPFv2) ; RFC 3031 (MPLS) ; RFC 4364 (BGP/MPLS IP VPNs).
+    \item RFC 4301, RFC 4302, RFC 4303 (IPsec) ; RFC 7296 (IKEv2) ;
+    RFC 8446 (TLS 1.3) ; RFC 8996 ; RFC 5280 (X.509).
+    \item RFC 2979 -- Behavior of and Requirements for Internet
+    Firewalls ; RFC 4987 -- TCP SYN Flooding Attacks and Common
+    Mitigations.
+    \item RFC 3022 -- Traditional IP Network Address Translator ;
+    RFC 4787 -- Network Address Translation Behavioral Requirements for
+    UDP.
+    \item RFC 1633 (IntServ) ; RFC 2205 (RSVP) ; RFC 2474, RFC 2475,
+    RFC 4594 (DiffServ) ; ITU-T G.114.
+    \item RFC 7426 (SDN) ; ONF, OpenFlow Switch Specification ; ETSI GS
+    NFV 002.
+\end{enumerate}
+
+\end{document}
