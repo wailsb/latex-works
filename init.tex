@@ -2232,10 +2232,13 @@ petits réseaux ou combiné à MPLS-TE.
     RFC 2475 (DiffServ), \url{https://www.rfc-editor.org/}.
 \end{itemize}
 
+% ==================================================
+\section{PARTIE 8 : SERVICES CLOUD ET VIRTUALISATION}
+% ==================================================
 % --------------------------------------------------
-\subsection{Membre 14 : SDN et NFV}
+\subsection{ SDN et NFV}
 % --------------------------------------------------
-\membre{\dotfill}{84 à 88}
+
 
 \paragraph{A. SDN (Software-Defined Networking)}
 
@@ -2275,21 +2278,9 @@ Infrastructure & Switchs et routeurs qui transfèrent les paquets & -- \\
 \hline
 \end{longtable}
 
-\exemple
-Dans un réseau d'entreprise, un administrateur définit depuis le
-contrôleur une politique unique (« le VLAN invités ne peut pas accéder
-aux serveurs internes »). Le contrôleur la traduit en règles installées
-automatiquement sur tous les switchs concernés, sans configurer chaque
-équipement un par un.
 
-\sources
-\begin{itemize}
-    \item IETF, RFC 7426 : Software-Defined Networking (SDN) : Layers and
-    Architecture Terminology, \url{https://www.rfc-editor.org/rfc/rfc7426},
-    consulté le 18 octobre 2026.
-    \item Open Networking Foundation, SDN Architecture Overview,
-    \url{https://opennetworking.org/}, consulté le 18 octobre 2026.
-\end{itemize}
+
+
 
 \subsubsection*{Question 85 : Qu'est-ce qu'OpenFlow ? Quel est son rôle dans le SDN ?}
 
@@ -2316,19 +2307,8 @@ au contrôleur de programmer directement les tables de flux des
 plan de contrôle centralisé et le plan de données. Il permet un contrôle
 fin, flux par flux, indépendant du constructeur des équipements.
 
-\exemple
-Un premier paquet d'un nouveau flux arrive sur un switch qui n'a aucune
-règle correspondante. Le switch envoie un Packet-In au contrôleur ;
-celui-ci décide du chemin et répond par un Flow-Mod. Les paquets
-suivants du même flux sont ensuite traités directement par le switch,
-sans solliciter à nouveau le contrôleur.
 
-\sources
-\begin{itemize}
-    \item Open Networking Foundation, OpenFlow Switch Specification,
-    \url{https://opennetworking.org/}, consulté le 18 octobre 2026.
-    \item IETF, RFC 7426, \url{https://www.rfc-editor.org/rfc/rfc7426},
-    consulté le 18 octobre 2026.
+
 \end{itemize}
 
 \subsubsection*{Question 86 : Quels avantages le SDN apporte-t-il par rapport aux réseaux traditionnels ?}
@@ -2358,27 +2338,9 @@ unique s'il n'est pas déployé en cluster, il devient une cible
 d'attaque privilégiée, et la migration depuis un réseau existant est
 complexe.
 
-\exemple
-\begin{longtable}{|L{3.6cm}|L{5.5cm}|L{5.5cm}|}
-\hline
-\textbf{Critère} & \textbf{Réseau traditionnel} & \textbf{Réseau SDN}
-\\ \hline
-Configuration & Manuelle, équipement par équipement & Centralisée,
-automatisée \\ \hline
-Plan de contrôle & Distribué dans chaque équipement & Centralisé dans le
-contrôleur \\ \hline
-Évolutivité des politiques & Lente, risque d'incohérences & Rapide,
-cohérente \\ \hline
-Dépendance constructeur & Forte & Réduite (standards ouverts) \\ \hline
-\end{longtable}
 
-\sources
-\begin{itemize}
-    \item Cisco, Software-Defined Networking (SDN) : vue d'ensemble,
-    \url{https://www.cisco.com/}, consulté le 18 octobre 2026.
-    \item Open Networking Foundation, \url{https://opennetworking.org/},
-    consulté le 18 octobre 2026.
-\end{itemize}
+
+
 
 \paragraph{B. NFV (Network Function Virtualization)}
 
@@ -2400,29 +2362,7 @@ L'architecture définie par l'ETSI comporte trois blocs :
     de vie et orchestration des VNF.
 \end{itemize}
 
-\textbf{Exemples de fonctions virtualisables :}
-\begin{itemize}
-    \item routeur virtuel (vRouter) et switch virtuel (Open vSwitch) ;
-    \item pare-feu et NGFW virtuels ;
-    \item IDS/IPS (Snort, Suricata) ;
-    \item répartiteur de charge, reverse proxy et WAF ;
-    \item NAT, DHCP et DNS ;
-    \item passerelle VPN et SD-WAN ;
-    \item DPI et optimiseur WAN ;
-    \item cœur de réseau mobile (vEPC, cœur 5G) et IMS.
-\end{itemize}
 
-\exemple
-Au lieu d'acheter un pare-feu matériel pour chaque site, une entreprise
-déploie un pare-feu virtuel sur un serveur standard. En cas de pic de
-trafic, l'orchestrateur lance une seconde instance en quelques minutes.
-
-\sources
-\begin{itemize}
-    \item ETSI, GS NFV 002 : Network Functions Virtualisation (NFV) ;
-    Architectural Framework, \url{https://www.etsi.org/technologies/nfv},
-    consulté le 18 octobre 2026.
-\end{itemize}
 
 \subsubsection*{Question 88 : Relation entre SDN et NFV : complémentaires ou concurrents ?}
 
@@ -2450,24 +2390,12 @@ le SDN dirige dynamiquement le trafic à travers elles. On parle de
 crée ou supprime les VNF selon la charge, et le contrôleur SDN adapte
 les chemins en conséquence.
 
-\exemple
-Dans un datacenter, un contrôleur SDN oriente le trafic web entrant vers
-un WAF virtuel, puis vers un load balancer virtuel, avant d'atteindre
-les serveurs d'application. Chaque VNF peut être dupliquée ou retirée
-sans modifier la topologie physique.
 
-\sources
-\begin{itemize}
-    \item ETSI, GS NFV 002, \url{https://www.etsi.org/technologies/nfv},
-    consulté le 18 octobre 2026.
-    \item IETF, RFC 7426, \url{https://www.rfc-editor.org/rfc/rfc7426},
-    consulté le 18 octobre 2026.
-\end{itemize}
 
 % --------------------------------------------------
-\subsection{Membre 15 : Synthèse globale et architecture}
+\subsection{Synthèse globale et architecture}
 % --------------------------------------------------
-\membre{\dotfill}{89}
+
 
 \subsubsection*{Question 89 : Infrastructure réseau d'un campus de 5000 utilisateurs}
 
@@ -2796,26 +2724,6 @@ Cas d'usage & Chat, jeux, temps réel interactif & Flux de notifications,
 cours de bourse & Solution de repli, anciens navigateurs \\ \hline
 \end{longtable}
 
-\sources
-\begin{itemize}
-    \item IETF, RFC 2474 : Definition of the Differentiated Services
-    Field, \url{https://www.rfc-editor.org/rfc/rfc2474}, consulté le 18
-    octobre 2026.
-    \item IETF, RFC 2865 : RADIUS,
-    \url{https://www.rfc-editor.org/rfc/rfc2865}, consulté le 18 octobre
-    2026.
-    \item IETF, RFC 4786 : Operation of Anycast Services,
-    \url{https://www.rfc-editor.org/rfc/rfc4786}, consulté le 18 octobre
-    2026.
-    \item IETF, RFC 6455 : The WebSocket Protocol,
-    \url{https://www.rfc-editor.org/rfc/rfc6455}, consulté le 18 octobre
-    2026.
-    \item IETF, RFC 9110 : HTTP Semantics,
-    \url{https://www.rfc-editor.org/rfc/rfc9110}, consulté le 18 octobre
-    2026.
-    \item Cisco, documentation réseau, \url{https://www.cisco.com/},
-    consulté le 18 octobre 2026.
-\end{itemize}
 
 % ==================================================
 \section{Conclusion générale}
@@ -2831,36 +2739,6 @@ performance des flux critiques ; enfin, les services web, le SDN et la
 NFV apportent la disponibilité, l'automatisation et la flexibilité
 nécessaires à une infrastructure d'entreprise moderne.
 
-% ==================================================
-\section{Bibliographie générale}
-% ==================================================
 
-\begin{enumerate}
-    \item RFC 1034, RFC 1035 (DNS) ; RFC 4033 (DNSSEC).
-    \item RFC 2131, RFC 2132 (DHCP) ; RFC 5905 (NTPv4).
-    \item RFC 4511, RFC 4512, RFC 4514 (LDAP) ; RFC 2865, RFC 2866
-    (RADIUS) ; RFC 8907 (TACACS+) ; RFC 4120 (Kerberos V5).
-    \item RFC 1213, RFC 3411, RFC 3414, RFC 3416 (SNMP) ; RFC 5424
-    (Syslog) ; RFC 3954 (NetFlow v9) ; RFC 7011 (IPFIX).
-    \item RFC 9110, RFC 9111, RFC 9113, RFC 9114 (HTTP) ; RFC 9000 (QUIC)
-    ; RFC 5789 (PATCH) ; RFC 1794 (DNS load balancing) ; RFC 4786
-    (Anycast) ; RFC 6455 (WebSocket).
-    \item R. Fielding, Architectural Styles and the Design of
-    Network-based Software Architectures, thèse, 2000.
-    \item RFC 4271 (BGP-4) ; RFC 1930 (AS) ; RFC 6793 (ASN 4 octets) ;
-    RFC 2328 (OSPFv2) ; RFC 3031 (MPLS) ; RFC 4364 (BGP/MPLS IP VPNs).
-    \item RFC 4301, RFC 4302, RFC 4303 (IPsec) ; RFC 7296 (IKEv2) ;
-    RFC 8446 (TLS 1.3) ; RFC 8996 ; RFC 5280 (X.509).
-    \item RFC 2979 -- Behavior of and Requirements for Internet
-    Firewalls ; RFC 4987 -- TCP SYN Flooding Attacks and Common
-    Mitigations.
-    \item RFC 3022 -- Traditional IP Network Address Translator ;
-    RFC 4787 -- Network Address Translation Behavioral Requirements for
-    UDP.
-    \item RFC 1633 (IntServ) ; RFC 2205 (RSVP) ; RFC 2474, RFC 2475,
-    RFC 4594 (DiffServ) ; ITU-T G.114.
-    \item RFC 7426 (SDN) ; ONF, OpenFlow Switch Specification ; ETSI GS
-    NFV 002.
-\end{enumerate}
 
 \end{document}
